@@ -448,7 +448,7 @@ footer{max-width:1180px;margin:0 auto;padding:40px 24px 80px;color:var(--dim);fo
     <div class="progress"><i id="prog"></i></div>
     <p id="modeNote" style="font-size:14px;color:var(--mut);margin:0 0 12px"></p>
 
-    <svg id="orgsvg" viewBox="0 0 1100 650" role="img" aria-label="Org diagram of development and compliance agent teams">
+    <svg id="orgsvg" viewBox="0 0 1100 650" role="img" aria-label="Org diagram of the development, compliance and publishing agent teams">
       <defs>
         <marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#2b3f6b"/></marker>
         <marker id="ahc" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#5ad1ff"/></marker>
@@ -519,6 +519,16 @@ footer{max-width:1180px;margin:0 auto;padding:40px 24px 80px;color:var(--dim);fo
       <g class="node" id="n_checker" data-k="checker"><rect x="925" y="162" width="130" height="54" rx="12"/><text class="ic" x="940" y="194">✔</text><text class="nm" x="964" y="187">checker</text><text class="st" x="964" y="204">waiting</text></g>
       <g class="node" id="n_adequacy" data-k="adequacy"><rect x="925" y="274" width="130" height="54" rx="12"/><text class="ic" x="940" y="306">⚖</text><text class="nm" x="964" y="299">adequacy</text><text class="st" x="964" y="316">waiting</text></g>
       <g class="node" id="n_qa" data-k="qa"><rect x="925" y="390" width="130" height="54" rx="12"/><text class="ic" x="940" y="422">★</text><text class="nm" x="964" y="415">qa</text><text class="st" x="964" y="432">waiting</text></g>
+
+      <!-- publishing team: runs only after a clean audit (static, not part of the animation) -->
+      <g id="pubteam" aria-label="Publishing team: document agent and importer, after a clean audit">
+        <rect x="915" y="458" width="150" height="92" rx="12" fill="none" stroke="#8a6a2f" stroke-dasharray="4 4" opacity=".8"/>
+        <text x="990" y="474" text-anchor="middle" style="font:9px JetBrains Mono,monospace;fill:#c9913f;letter-spacing:.08em">PUBLISHING · AFTER A CLEAN AUDIT</text>
+        <rect x="930" y="482" width="120" height="24" rx="8" fill="none" stroke="#8a6a2f"/>
+        <text x="990" y="498" text-anchor="middle" style="font:11px JetBrains Mono,monospace;fill:#d9b36b">document</text>
+        <rect x="930" y="514" width="120" height="24" rx="8" fill="none" stroke="#8a6a2f"/>
+        <text x="990" y="530" text-anchor="middle" style="font:11px JetBrains Mono,monospace;fill:#d9b36b">importer</text>
+      </g>
 
       <!-- compliance findings back to the record (own area) -->
       <defs><marker id="ahv" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#a78bfa"/></marker></defs>
