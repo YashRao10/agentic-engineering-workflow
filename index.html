@@ -1377,7 +1377,8 @@ const sleep=ms=>new Promise(r=>setTimeout(r,ms));
    ====================================================================== */
 const svg1=document.getElementById('iso1');
 if(svg1){
-const S=Scene(svg1,{yaw:-.62,scale:37,cx:450,cy:330,ox:.55,oy:2.0});
+const S=Scene(svg1,{yaw:-.62,scale:36,cx:450,cy:340,ox:.55,oy:2.0});
+S.pitch=.75;   /* a lower camera, so the layers under the teams read as separate levels */
 const N={ /* world positions: x right, y toward the viewer */
  intake:{x:-6.3,y:-1.6,k:'dev',l:'intake'},planner:{x:-4.7,y:-1.6,k:'dev',l:'planner'},req:{x:-3.1,y:-1.6,k:'dev',l:'req'},design:{x:-1.5,y:-1.6,k:'dev',l:'design'},
  coding:{x:-3.8,y:.5,k:'dev',l:'coding+ut'},testproc:{x:-1.8,y:.5,k:'dev',l:'test proc'},testcode:{x:-1.8,y:2.2,k:'dev',l:'test code'},
@@ -1386,7 +1387,7 @@ const N={ /* world positions: x right, y toward the viewer */
 const EDGE=[['intake','planner'],['planner','req'],['req','design'],['design','coding'],['design','testproc'],['testproc','testcode'],['coding','testcode']];
 const COL={dev:C.cy,cmp:C.vi,pub:C.am};
 const st={};let sel=null,recN=0,platN=0,auditOK=false,running=false,pk=null,direct=false;
-const ZM=-1.7,ZP=-3.5,PX=7.0,PY=-.7;   /* MCP layer and platform layer sit under the teams */
+const ZM=-2.4,ZP=-4.6,PX=7.0,PY=-.7;   /* MCP layer and platform layer sit under the teams */
 const TOOLN={intake:'create_customer_req',planner:'create_system_req',req:'create_hlr',design:'create_llr',coding:'create_source_ref',testproc:'create_test_case',testcode:'create_test_procedure'};
 Object.keys(N).forEach(k=>st[k]='idle');
 const stFill=k=>({idle:'#1c2d52',work:'#6b4a12',done:'#14502f',fail:'#5a1c25'})[st[k]];
@@ -1398,14 +1399,14 @@ S.draw=g=>{
   S.cyl(g,PX,PY,.7,.8,'#4a3510',C.am,ZP,auditOK||platN>0?C.am:null);
   S.text(g,PX,PY,ZP+1.75,'PLATFORM '+platN+' records',C.am,10,'middle',600);
   S.poly(g,[[-7.8,-3.3,ZM],[8.9,-3.3,ZM],[8.9,7.2,ZM],[-7.8,7.2,ZM]],C.am,C.am,.07,'6 4',1.3);
-  S.text(g,-7.6,-2.95,ZM+.15,'MCP · MODEL CONTEXT PROTOCOL',C.am,10,'start',700);
-  S.text(g,-7.6,-2.35,ZM+.15,'create + read tools only: no update, no delete',C.mut,9,'start',500);
+  S.text(g,8.7,6.95,ZM+.15,'MCP · MODEL CONTEXT PROTOCOL',C.am,10,'end',700);
+  S.text(g,8.7,6.3,ZM+.15,'create + read tools only: no update, no delete',C.mut,9,'end',500);
   /* platforms */
   S.slab(g,-7.3,-.4,-2.7,3.1,'#16264a',C.l2);
   S.slab(g,1.6,4.3,-2.7,3.1,'#1d1840','#6d58b8');
   S.slab(g,1.6,4.3,3.4,6.8,'#2b2210','#8a6a2f');
   S.text(g,-7.1,2.95,.3,'DEVELOPMENT TEAM',C.mut,10,'start',600);
-  S.text(g,1.8,-2.75,.3,'COMPLIANCE TEAM',C.vi,10,'start',600);
+  S.text(g,1.8,-3.2,.3,'COMPLIANCE TEAM',C.vi,10,'start',600);
   S.text(g,1.8,6.6,.3,'PUBLISHING · CLEAN AUDIT ONLY',C.am,9,'start',600);
   /* handoff arrows on the platform */
   EDGE.forEach(e=>S.line(g,[N[e[0]].x,N[e[0]].y,.32],[N[e[1]].x,N[e[1]].y,.32],st[e[0]]==='done'?C.gr:'#33497a',st[e[0]]==='done'?2.4:1.6));
