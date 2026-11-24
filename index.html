@@ -812,6 +812,7 @@ footer{max-width:1180px;margin:0 auto;padding:40px 24px 80px;color:var(--dim);fo
   verification/    <span class="d">test cases, procedures, results</span>
   compliance/      <span class="d">findings, audit report, traceability matrix</span>
   provenance.json  <span class="d">who approved what, which model, when</span>
+  documents/       <span class="d">design description, test report (made after a clean audit)</span>
   publish_plan     <span class="d">every platform call, for a human yes</span></div>
 </section>
 
@@ -877,6 +878,9 @@ footer{max-width:1180px;margin:0 auto;padding:40px 24px 80px;color:var(--dim);fo
       <li>Human gate at each agent, with feedback that reaches the redraft.</li>
       <li>Firewall between the teams, enforced in code and again by the operating system, so the audit cannot change the record it is checking.</li>
       <li>Audit gate, content fingerprint, stale-record check, and guarded publish with read-back.</li>
+      <li>A publishing step that only runs after a clean audit: a document agent renders the design description and test report straight from the audited record (no model, so the documents cannot drift from it), and an importer writes and reads back.</li>
+      <li>A test-strength check that can be switched from a warning to a hard stop, so a weak test set blocks the audit.</li>
+      <li>Each development agent now sends back its own draft when links are missing or an id repeats, before a person has to look at it.</li>
       <li>A regression suite that runs without calling a model.</li>
       <li>Local-model safeguards: a readiness check that stops a run at once instead of quietly degrading, smaller jobs per call, per-agent model choice under the same restricted-work rules, a repair step that shows a model its own rejected code, a fixed memory window so long prompts are not silently cut, and a watchdog that only stops a run that has gone quiet.</li>
       <li>A first small slice written to a sandbox project and read back clean.</li>
@@ -889,7 +893,7 @@ footer{max-width:1180px;margin:0 auto;padding:40px 24px 80px;color:var(--dim);fo
     <div class="card"><h3 class="rh n">Next</h3><ul>
       <li>A full run on a local model for restricted work, using the new safeguards (built and tested with stand-in models, not yet proven on a real local run).</li>
       <li>A full publish to a sandbox project, then read back.</li>
-      <li>Decide the document agent and the importer roles.</li>
+      <li>Attach the generated documents to the platform by hand, since it cannot accept document content yet.</li>
       <li>A trial on a real, non-sensitive project with an engineer reviewing every gate.</li>
     </ul></div>
   </div>
