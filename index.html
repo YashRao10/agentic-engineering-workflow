@@ -1359,10 +1359,11 @@ function Scene(svg,cfg){
   S.dot=(g,a,color,r)=>{const p=S.P(a[0],a[1],a[2]);mk('circle',{cx:p[0],cy:p[1],r:r||5,fill:color,filter:'drop-shadow(0 0 5px '+color+')'},g)};
   S.render=()=>{while(svg.firstChild)svg.removeChild(svg.firstChild);const g=mk('g',{},svg);S.draw(g)};
   /* drag to turn (horizontal only, so a vertical swipe still scrolls the page) */
-  let sx=null,y0=0;
-  svg.addEventListener('pointerdown',e=>{sx=e.clientX;y0=S.yaw;try{svg.setPointerCapture(e.pointerId)}catch(_){}});
-  svg.addEventListener('pointermove',e=>{if(sx==null)return;S.yaw=Math.max(-1.25,Math.min(.5,y0+(e.clientX-sx)*.008));S.render()});
-  const up=()=>{sx=null};svg.addEventListener('pointerup',up);svg.addEventListener('pointercancel',up);
+  let sx=null,y0=0,drag=false;   /* capture the pointer only once it really drags, or a plain click on a block is stolen */
+  svg.addEventListener('pointerdown',e=>{sx=e.clientX;y0=S.yaw;drag=false});
+  svg.addEventListener('pointermove',e=>{if(sx==null)return;if(!drag){if(Math.abs(e.clientX-sx)<6)return;drag=true;try{svg.setPointerCapture(e.pointerId)}catch(_){}}
+    S.yaw=Math.max(-1.25,Math.min(.5,y0+(e.clientX-sx)*.008));S.render()});
+  const up=()=>{sx=null;drag=false};svg.addEventListener('pointerup',up);svg.addEventListener('pointercancel',up);
   /* run an animation function for ms milliseconds (fn(t 0..1) mutates state, then we redraw) */
   S.play=(ms,fn)=>new Promise(res=>{if(reduce){fn(1);S.render();res();return}const t0=performance.now();(function f(now){const t=Math.min(1,(now-t0)/ms);fn(t);S.render();if(t<1)requestAnimationFrame(f);else res()})(t0)});
   S.visible=()=>{const r=svg.getBoundingClientRect();return r.bottom>0&&r.top<innerHeight};
