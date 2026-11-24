@@ -1375,12 +1375,12 @@ const sleep=ms=>new Promise(r=>setTimeout(r,ms));
    ====================================================================== */
 const svg1=document.getElementById('iso1');
 if(svg1){
-const S=Scene(svg1,{yaw:-.62,scale:41,cx:450,cy:292,ox:-.4,oy:1.7});
+const S=Scene(svg1,{yaw:-.62,scale:51,cx:450,cy:262,ox:-.4,oy:1.9});
 const N={ /* world positions: x right, y toward the viewer */
  intake:{x:-6.3,y:-1.6,k:'dev',l:'intake'},planner:{x:-4.7,y:-1.6,k:'dev',l:'planner'},req:{x:-3.1,y:-1.6,k:'dev',l:'req'},design:{x:-1.5,y:-1.6,k:'dev',l:'design'},
  coding:{x:-3.8,y:.5,k:'dev',l:'coding+ut'},testproc:{x:-1.8,y:.5,k:'dev',l:'test proc'},testcode:{x:-1.8,y:2.2,k:'dev',l:'test code'},
  checker:{x:2.6,y:-1.6,k:'cmp',l:'checker'},adequacy:{x:2.6,y:.2,k:'cmp',l:'adequacy'},qa:{x:2.6,y:1.9,k:'cmp',l:'qa'},
- document:{x:2.6,y:4.1,k:'pub',l:'document'},importer:{x:2.6,y:5.5,k:'pub',l:'importer'}};
+ document:{x:2.6,y:4.1,k:'pub',l:'document'},importer:{x:2.6,y:5.4,k:'pub',l:'importer'}};
 const EDGE=[['intake','planner'],['planner','req'],['req','design'],['design','coding'],['design','testproc'],['testproc','testcode'],['coding','testcode']];
 const COL={dev:C.cy,cmp:C.vi,pub:C.am};
 const st={};let sel=null,recN=0,platN=0,auditOK=false,running=false,pk=null;
@@ -1392,30 +1392,30 @@ S.draw=g=>{
   /* platforms */
   S.slab(g,-7.3,-.4,-2.7,3.1,'#16264a',C.l2);
   S.slab(g,1.6,4.3,-2.7,3.1,'#1d1840','#6d58b8');
-  S.slab(g,1.6,4.3,3.4,6.1,'#2b2210','#8a6a2f');
-  S.text(g,-7.1,-2.5,.3,'DEVELOPMENT TEAM',C.mut,9,'start',600);
-  S.text(g,1.8,-2.5,.3,'COMPLIANCE TEAM',C.vi,9,'start',600);
-  S.text(g,1.8,3.6,.3,'PUBLISHING · CLEAN AUDIT ONLY',C.am,8,'start',600);
+  S.slab(g,1.6,4.3,3.4,6.8,'#2b2210','#8a6a2f');
+  S.text(g,-7.1,2.95,.3,'DEVELOPMENT TEAM',C.mut,10,'start',600);
+  S.text(g,1.8,2.95,.3,'COMPLIANCE TEAM',C.vi,10,'start',600);
+  S.text(g,1.8,6.6,.3,'PUBLISHING · CLEAN AUDIT ONLY',C.am,9,'start',600);
   /* handoff arrows on the platform */
   EDGE.forEach(e=>S.line(g,[N[e[0]].x,N[e[0]].y,.32],[N[e[1]].x,N[e[1]].y,.32],st[e[0]]==='done'?C.gr:'#33497a',st[e[0]]==='done'?2.4:1.6));
   ['design','testcode'].forEach(k=>S.line(g,[N[k].x,N[k].y,.32],[.5,0,.32],st[k]==='done'?C.cy:'#243658',1.5,'4 4'));
   ['checker','adequacy','qa'].forEach(k=>S.line(g,[.5,0,.32],[N[k].x,N[k].y,.32],'#6d58b8',1.4,'3 4',.8));
   S.line(g,[N.qa.x,N.qa.y,.32],[N.document.x,N.document.y,.32],auditOK?C.am:'#4a3b1d',1.6,'3 4');
   S.line(g,[N.document.x,N.document.y,.32],[N.importer.x,N.importer.y,.32],auditOK?C.am:'#4a3b1d',1.6,'3 4');
-  S.line(g,[N.importer.x,N.importer.y,.32],[6.9,4.8,.32],auditOK?C.am:'#4a3b1d',1.8,'3 4');
+  S.line(g,[N.importer.x,N.importer.y,.32],[6.9,5.0,.32],auditOK?C.am:'#4a3b1d',1.8,'3 4');
   /* the firewall: a glass wall, with the record standing in the gap */
   S.poly(g,[[.5,-3.2,0],[.5,3.4,0],[.5,3.4,2.6],[.5,-3.2,2.6]],'#ff5d6c','#ff5d6c',.07,'5 4',1.3);
   S.text(g,.5,-3.2,2.9,'FIREWALL · ONLY THE RECORD CROSSES',C.rd,8,'middle',600);
   S.cyl(g,.5,0,.55,.9,'#12395a',C.cy,.18,C.cy);
   S.text(g,.5,0,1.5,'RECORD '+recN,C.cy,9,'middle',600);
   /* platform at the far end */
-  S.cyl(g,6.9,4.8,.62,.8,'#4a3510',C.am,.18,auditOK?C.am:null);
-  S.text(g,6.9,4.8,1.55,'PLATFORM '+platN,C.am,9,'middle',600);
+  S.cyl(g,6.9,5.0,.62,.8,'#4a3510',C.am,.18,auditOK?C.am:null);
+  S.text(g,6.9,5.0,1.55,'PLATFORM '+platN,C.am,10,'middle',600);
   /* agents, far to near */
   Object.keys(N).sort((a,b)=>S.P(N[a].x,N[a].y,0)[2]-S.P(N[b].x,N[b].y,0)[2]).forEach(k=>{
     const n=N[k];S.box(g,n.x,n.y,1.0,1.0,.62,stFill(k),.18,k===sel?'#ffffff':stStroke(k),st[k]==='work'?C.am:null);
     const hit=S.box;void hit});
-  Object.keys(N).forEach(k=>{const n=N[k];S.text(g,n.x,n.y,1.12,n.l,k===sel?'#fff':'#c7d6f5',10,'middle',k===sel?700:500)});
+  Object.keys(N).forEach(k=>{const n=N[k];S.text(g,n.x,n.y,1.12,n.l,k===sel?'#fff':'#c7d6f5',11,'middle',k===sel?700:500)});
   if(pk)S.dot(g,pk,C.cy,5);
   /* invisible hit targets: one circle per agent, so clicking works from any angle */
   Object.keys(N).forEach(k=>{const p=S.P(N[k].x,N[k].y,.5);const c=mk('circle',{cx:p[0],cy:p[1],r:S.scale*.8,fill:'transparent',style:'cursor:pointer'},g);c.addEventListener('click',()=>pick(k))});
@@ -1455,7 +1455,7 @@ async function play(){
   for(const k of ['checker','adequacy','qa']){await go(k,{x:.5,y:0})}
   auditOK=true;S.render();await sleep(reduce?0:350);
   await go('document',N.qa);await go('importer',N.document);
-  await S.play(600,t=>{pk=[N.importer.x+(6.9-N.importer.x)*t,N.importer.y+(4.8-N.importer.y)*t,.4]});pk=null;platN=recN;S.render();
+  await S.play(600,t=>{pk=[N.importer.x+(6.9-N.importer.x)*t,N.importer.y+(5.0-N.importer.y)*t,.4]});pk=null;platN=recN;S.render();
   running=false}
 function reset(keep){Object.keys(st).forEach(k=>st[k]='idle');recN=0;platN=0;auditOK=false;pk=null;if(!keep)running=false;S.render()}
 document.getElementById('iso1Play').onclick=play;
