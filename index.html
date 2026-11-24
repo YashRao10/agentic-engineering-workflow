@@ -1,0 +1,1268 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Agentic Engineering Workflow</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#060a13; --bg2:#0a1020; --panel:#0d1527; --panel2:#111b33; --line:#1d2b4a; --line2:#2b3f6b;
+  --ink:#e8eefb; --mut:#8a9bc0; --dim:#5b6c91;
+  --cy:#5ad1ff; --cyd:#1b7fa8; --am:#ffb454; --gr:#4ade80; --rd:#ff5d6c; --vi:#a78bfa;
+  --sans:'Space Grotesk',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --mono:'JetBrains Mono',ui-monospace,'SF Mono',Menlo,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;overflow-x:clip}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.55;overflow-x:hidden;
+  background-image:
+    linear-gradient(rgba(90,209,255,.035) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(90,209,255,.035) 1px,transparent 1px);
+  background-size:48px 48px;}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:radial-gradient(900px 500px at 15% -5%,rgba(90,209,255,.10),transparent 60%),
+             radial-gradient(800px 500px at 95% 30%,rgba(167,139,250,.07),transparent 60%);}
+main,nav,footer{position:relative;z-index:1}
+section{padding:110px 24px;max-width:1180px;margin:0 auto}
+.tag{font-family:var(--mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--cy);display:flex;align-items:center;gap:10px;margin-bottom:18px}
+.tag::before{content:"";width:28px;height:1px;background:var(--cy)}
+h2{font-size:clamp(30px,4.6vw,52px);line-height:1.08;font-weight:700;letter-spacing:-.02em;max-width:860px}
+h2 em{font-style:normal;color:var(--cy)}
+.lede{color:var(--mut);max-width:680px;margin-top:20px;font-size:18px}
+.rv{opacity:0;transform:translateY(26px);transition:opacity .8s ease,transform .8s ease}
+.rv.in{opacity:1;transform:none}
+.card{background:linear-gradient(180deg,var(--panel2),var(--panel));border:1px solid var(--line);border-radius:16px;padding:22px}
+.mono{font-family:var(--mono)}
+button{font-family:var(--sans);cursor:pointer}
+.btn{background:transparent;color:var(--ink);border:1px solid var(--line2);border-radius:10px;padding:10px 16px;font-size:14px;font-weight:500;transition:.2s}
+.btn:hover{border-color:var(--cy);color:var(--cy);background:rgba(90,209,255,.06)}
+.btn.pri{background:var(--cy);color:#04121c;border-color:var(--cy);font-weight:600}
+.btn.pri:hover{background:#8be0ff;color:#04121c}
+.btn.bad:hover{border-color:var(--rd);color:var(--rd);background:rgba(255,93,108,.07)}
+.btn:disabled{opacity:.4;cursor:default}
+
+/* side nav */
+nav{position:fixed;right:18px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:12px;z-index:20}
+nav a{width:10px;height:10px;border-radius:50%;border:1px solid var(--line2);background:transparent;display:block;transition:.25s;position:relative}
+nav a.on{background:var(--cy);border-color:var(--cy);box-shadow:0 0 12px var(--cy)}
+nav a span{position:absolute;right:20px;top:50%;transform:translateY(-50%);font:11px var(--mono);color:var(--mut);white-space:nowrap;opacity:0;pointer-events:none;transition:.2s;background:var(--panel);padding:3px 8px;border-radius:6px;border:1px solid var(--line)}
+nav a:hover span{opacity:1}
+@media(max-width:900px){nav{display:none}section{padding:80px 16px}}
+@media(max-width:700px){.stage{overflow-x:auto}#orgsvg{min-width:760px}#cycsvg{min-width:0}.hero h1{font-size:44px}}
+
+/* hero */
+.hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding-top:60px;position:relative}
+.hero .eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.2em;color:var(--am);text-transform:uppercase;margin-bottom:22px;display:flex;gap:10px;align-items:center}
+.hero .eyebrow i{width:8px;height:8px;border-radius:50%;background:var(--am);box-shadow:0 0 14px var(--am);animation:bl 1.6s infinite}
+@keyframes bl{50%{opacity:.25}}
+.hero h1{font-size:clamp(44px,8.4vw,108px);line-height:.98;font-weight:700;letter-spacing:-.035em;max-width:1000px}
+.hero h1 span{background:linear-gradient(95deg,var(--cy),#9be7ff 45%,var(--vi));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{max-width:640px;color:var(--mut);font-size:20px;margin-top:28px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px;margin-top:54px;max-width:960px}
+.stat{border:1px solid var(--line);border-radius:14px;padding:16px 18px;background:rgba(13,21,39,.7)}
+.stat b{display:block;font-size:34px;font-weight:700;letter-spacing:-.02em;color:var(--cy)}
+.stat span{font-size:13px;color:var(--mut)}
+.scrollhint{margin-top:52px;font:12px var(--mono);letter-spacing:.2em;color:var(--dim)}
+.scrollhint::after{content:" ↓";animation:bl 1.6s infinite}
+
+
+
+/* human vs agent */
+.pair{display:grid;grid-template-columns:1fr 70px 1fr;gap:0;margin-top:48px;align-items:stretch}
+.pair .col h3{font:600 12px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--mut);margin-bottom:12px}
+.role{display:flex;align-items:center;gap:12px;padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:var(--panel);margin-bottom:10px;font-size:15px}
+.role .dot{width:30px;height:30px;border-radius:8px;display:grid;place-items:center;font-size:15px;flex:none}
+.role.h .dot{background:rgba(255,180,84,.12);color:var(--am)}
+.role.a .dot{background:rgba(90,209,255,.12);color:var(--cy)}
+.role small{display:block;color:var(--dim);font-size:12px}
+.mid{display:flex;flex-direction:column;justify-content:space-around;align-items:center;color:var(--dim);font-family:var(--mono);font-size:20px}
+@media(max-width:760px){.pair{grid-template-columns:1fr}.mid{display:none}}
+
+/* org diagram */
+.stage{margin-top:40px;padding:18px;overflow:hidden}
+.stagebar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:10px}
+.stagebar .sp{flex:1}
+.verdict{font:600 13px var(--mono);padding:8px 14px;border-radius:999px;border:1px solid var(--line2);color:var(--mut);transition:.4s}
+.verdict.ok{color:var(--gr);border-color:var(--gr);background:rgba(74,222,128,.1);box-shadow:0 0 22px rgba(74,222,128,.25)}
+.progress{height:4px;background:var(--line);border-radius:4px;overflow:hidden;margin:0 0 14px}
+.progress i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--cy),var(--gr));transition:width .5s}
+svg{display:block;width:100%;height:auto}
+.zone{fill:rgba(13,21,39,.55);stroke:var(--line2);stroke-width:1.4}
+.zt{font:600 11px var(--mono);letter-spacing:.14em;fill:var(--mut)}
+.node rect{fill:var(--panel);stroke:var(--line2);stroke-width:1.6;transition:.35s;cursor:pointer}
+.node:hover rect{stroke:var(--cy)}
+.node .nm{font:600 13px var(--sans);fill:var(--ink);pointer-events:none}
+.node .st{font:11px var(--mono);fill:var(--dim);pointer-events:none;transition:.3s}
+.node .ic{font:15px var(--sans);fill:var(--mut);pointer-events:none}
+.node.work rect{stroke:var(--am);fill:rgba(255,180,84,.09);animation:pu 1.2s infinite}
+.node.work .st{fill:var(--am)}
+.node.done rect{stroke:var(--gr);fill:rgba(74,222,128,.08)}
+.node.done .st{fill:var(--gr)}
+.node.sel rect{stroke:var(--cy);stroke-width:2.6}
+@keyframes pu{50%{stroke-width:3.4;opacity:.8}}
+.arr{fill:none;stroke:var(--line2);stroke-width:1.6}
+.arr.live{stroke:var(--cy)}
+.ghost{fill:none;stroke:none}
+.orch{fill:rgba(90,209,255,.05);stroke:var(--cy);stroke-width:1.4;stroke-dasharray:6 5}
+.orcht{font:600 12px var(--mono);fill:var(--cy);letter-spacing:.06em}
+.orchs{font:12px var(--sans);fill:var(--mut)}
+.wall{stroke:var(--rd);stroke-width:2;stroke-dasharray:8 7;opacity:.8}
+.wallt{font:600 10.5px var(--mono);fill:var(--rd);letter-spacing:.1em}
+.rec path,.rec ellipse{fill:var(--panel);stroke:var(--cy);stroke-width:2}
+.rec text{font:700 13px var(--sans);fill:var(--cy);pointer-events:none}
+.rec text.s{font:10px var(--mono);fill:var(--mut);font-weight:400}
+.mcprect{fill:rgba(255,180,84,.05);stroke:var(--am);stroke-width:1.4;stroke-dasharray:6 5;transition:.3s}
+.mcpband{cursor:pointer}.mcpband:hover .mcprect,.mcpband.sel .mcprect{stroke:var(--cy)}
+.mcpband.hot .mcprect{fill:rgba(255,180,84,.16);stroke-width:2.4}
+.mt{fill:var(--am)!important}
+.gate path{fill:var(--bg);stroke:var(--am);stroke-width:2;transition:.4s}
+.gate text{font:700 8.5px var(--mono);fill:var(--am);letter-spacing:.08em;transition:.4s}
+.gate.locked path{stroke:var(--rd);fill:rgba(255,93,108,.15)}
+.gate.locked text{fill:var(--rd)}
+.gate.open path{stroke:var(--gr);fill:rgba(74,222,128,.2);filter:drop-shadow(0 0 8px rgba(74,222,128,.6))}
+.gate.open text{fill:var(--gr)}
+.gate.off path{stroke:var(--dim);fill:none}
+.gate.off text{fill:var(--dim)}
+.pkt.v{fill:var(--vi);filter:drop-shadow(0 0 6px var(--vi))}
+.code2{font:13px/1.7 var(--mono);background:#070c18;border:1px solid var(--line);border-radius:12px;padding:16px 18px;overflow:auto;color:var(--mut);white-space:pre}
+.code2 .k{color:var(--cy)}.code2 .s{color:var(--am)}.code2 .g{color:var(--gr)}.code2 .d{color:var(--dim)}
+.anat{display:grid;grid-template-columns:1.15fr 1fr;gap:20px;margin-top:40px;align-items:start}
+@media(max-width:900px){.anat{grid-template-columns:1fr}}
+.callouts .co{padding:14px 16px;border:1px solid var(--line);border-radius:12px;margin-bottom:10px;background:var(--panel);font-size:15px;color:var(--mut)}
+.callouts .co b{display:block;color:var(--ink);margin-bottom:3px;font-size:16px}
+.callouts .co i{font:normal 600 11px var(--mono);color:var(--am);letter-spacing:.12em;margin-right:8px}
+.pkt{fill:var(--cy);filter:drop-shadow(0 0 6px var(--cy))}
+.pkt.g{fill:var(--gr);filter:drop-shadow(0 0 6px var(--gr))}
+.pkt.o{fill:var(--am);filter:drop-shadow(0 0 6px var(--am))}
+.detail{margin-top:16px;display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:14px}
+.detail .card{padding:16px 18px}
+.detail h4{font:600 11px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--dim);margin-bottom:8px}
+.detail p{font-size:15px;color:var(--ink)}
+.detail .big{font-size:20px;font-weight:600;color:var(--cy);margin-bottom:6px}
+.detail .mut{color:var(--mut)}
+@media(max-width:860px){.detail{grid-template-columns:1fr}}
+.log{margin-top:14px;font:12.5px/1.7 var(--mono);color:var(--mut);max-height:150px;overflow:auto;padding:14px 16px;border:1px solid var(--line);border-radius:12px;background:#070c18}
+.log div b{color:var(--cy);font-weight:600}.log div i{font-style:normal;color:var(--gr)}.log div u{text-decoration:none;color:var(--rd)}.log div s{text-decoration:none;color:var(--am)}
+
+/* agent cycle */
+.cyclewrap{display:grid;grid-template-columns:1.25fr 1fr;gap:26px;margin-top:44px;align-items:center}
+@media(max-width:900px){.cyclewrap{grid-template-columns:1fr}}
+.cn rect{fill:var(--panel);stroke:var(--line2);stroke-width:1.6;transition:.3s}
+.cn text{font:600 13px var(--sans);fill:var(--ink);pointer-events:none}
+.cn text.s{font:10.5px var(--mono);fill:var(--dim);font-weight:400}
+.cn.on rect{stroke:var(--cy);fill:rgba(90,209,255,.1);filter:drop-shadow(0 0 10px rgba(90,209,255,.35))}
+.cn.gate.on rect{stroke:var(--am);fill:rgba(255,180,84,.1);filter:drop-shadow(0 0 10px rgba(255,180,84,.35))}
+.cn.past rect{stroke:var(--gr)}
+.steps{list-style:none}
+.steps li{padding:12px 14px;border:1px solid var(--line);border-radius:12px;margin-bottom:9px;color:var(--mut);font-size:15px;transition:.3s;display:flex;gap:12px}
+.steps li b{font:600 12px var(--mono);color:var(--dim);padding-top:3px;flex:none}
+.steps li.on{border-color:var(--cy);color:var(--ink);background:rgba(90,209,255,.06)}
+.steps li.on b{color:var(--cy)}
+.steps li.gate.on{border-color:var(--am);background:rgba(255,180,84,.06)}
+.steps li.gate.on b{color:var(--am)}
+.cycbtns{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+
+/* firewall */
+.fw{display:grid;grid-template-columns:1fr 90px 1fr;gap:0;margin-top:44px}
+@media(max-width:820px){.fw{grid-template-columns:1fr}.fwmid{display:none}}
+.fwside{padding:20px}
+.fwside h3{font:600 12px var(--mono);letter-spacing:.14em;text-transform:uppercase;margin-bottom:12px}
+.fwside.dev h3{color:var(--am)}.fwside.cmp h3{color:var(--gr)}
+.chip{display:inline-block;font:12px var(--mono);padding:5px 10px;border-radius:8px;border:1px solid var(--line2);color:var(--mut);margin:0 6px 8px 0}
+.fwmid{position:relative}
+.fwmid::before{content:"";position:absolute;left:50%;top:0;bottom:0;border-left:2px dashed var(--rd);opacity:.7}
+.fwmid span{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%) rotate(-90deg);white-space:nowrap;font:600 11px var(--mono);letter-spacing:.14em;color:var(--rd);background:var(--bg);padding:4px 10px}
+.fwbtns{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:10px;margin-top:22px}
+.fwbtns .btn{text-align:left;display:flex;justify-content:space-between;gap:10px;align-items:center}
+.fwbtns .btn em{font:normal 600 11px var(--mono);color:var(--dim)}
+.fwlog{margin-top:14px;min-height:150px}
+.fwlog .row{display:flex;gap:12px;align-items:center;padding:9px 12px;border-bottom:1px solid var(--line);font-size:14px;animation:sl .4s}
+@keyframes sl{from{opacity:0;transform:translateX(-10px)}}
+.fwlog .row:last-child{border:0}
+.pill{font:600 11px var(--mono);padding:3px 9px;border-radius:6px;flex:none}
+.pill.ok{background:rgba(74,222,128,.12);color:var(--gr)}
+.pill.no{background:rgba(255,93,108,.12);color:var(--rd)}
+
+/* compliance view (live) */
+.cv{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin-top:10px}
+.cvn{position:relative;padding:14px 14px 14px 18px;border:1px solid var(--line2);border-radius:14px;background:var(--panel);transition:border-color .3s,background .3s}
+.cvn b{display:block;font-size:16px}.cvn .q{display:block;color:var(--mut);font-size:14px}.cvn .st{display:block;font-size:14px;margin-top:6px;color:var(--dim)}
+.cvn i{position:absolute;left:0;top:14px;bottom:14px;width:3px;border-radius:0 3px 3px 0;background:var(--dim);transition:background .3s}
+.cvn.run{border-color:var(--am);background:rgba(255,180,84,.06)}.cvn.run i{background:var(--am);animation:cvp 1s ease-in-out infinite}.cvn.run .st{color:var(--am)}
+.cvn.ok{border-color:var(--gr)}.cvn.ok i{background:var(--gr)}.cvn.ok .st{color:var(--gr)}
+.cvn.warn{border-color:var(--am)}.cvn.warn i{background:var(--am)}.cvn.warn .st{color:var(--am)}
+@keyframes cvp{50%{opacity:.35}}
+.cvgate{margin-top:10px;padding:14px 16px;border:1px solid var(--line2);border-radius:14px;background:var(--panel);transition:border-color .3s,background .3s}
+.cvgate .cvgl{font:600 11px var(--mono);letter-spacing:.14em;color:var(--dim)}
+.cvgate .cvgs{font:700 22px var(--sans);margin-top:2px}.cvgate .cvgw{color:var(--mut);font-size:14px}
+.cvgate .cvfp{font:12px var(--mono);color:var(--dim);margin-top:6px;min-height:16px}
+.cvgate.open{border-color:var(--gr);background:rgba(74,222,128,.05)}.cvgate.open .cvgs{color:var(--gr)}
+.cvgate.blocked{border-color:var(--rd);background:rgba(255,93,108,.05)}.cvgate.blocked .cvgs{color:var(--rd)}
+.cvgate.wait .cvgs{color:var(--mut)}
+@media(prefers-reduced-motion:reduce){.cvn.run i{animation:none}}
+
+/* trace matrix */
+.mx{margin-top:40px}
+.mxtop{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:14px}
+.mxtop .sp{flex:1}
+table{width:100%;border-collapse:separate;border-spacing:0 8px;font-size:14px}
+th{font:600 11px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--dim);text-align:left;padding:0 12px 4px}
+td{padding:12px;background:var(--panel);border-top:1px solid var(--line);border-bottom:1px solid var(--line);transition:.4s;vertical-align:top}
+td:first-child{border-left:1px solid var(--line);border-radius:10px 0 0 10px}
+td:last-child{border-right:1px solid var(--line);border-radius:0 10px 10px 0}
+td small{display:block;color:var(--dim);font:11px var(--mono);margin-top:3px}
+td .x{display:inline-flex;align-items:center;gap:7px}
+td .x i{width:9px;height:9px;border-radius:50%;background:var(--gr);box-shadow:0 0 8px var(--gr);transition:.4s;flex:none}
+td.miss{background:rgba(255,93,108,.08);color:var(--rd)}
+td.miss .x i{background:var(--rd);box-shadow:0 0 8px var(--rd)}
+td.stale{background:rgba(255,180,84,.08);color:var(--am)}
+td.stale .x i{background:var(--am);box-shadow:0 0 8px var(--am)}
+.audit{margin-top:14px;display:flex;gap:16px;flex-wrap:wrap;align-items:flex-start}
+.badge{font:700 15px var(--mono);padding:14px 20px;border-radius:12px;border:1px solid var(--gr);color:var(--gr);background:rgba(74,222,128,.08);transition:.4s;letter-spacing:.06em}
+.badge.bad{border-color:var(--rd);color:var(--rd);background:rgba(255,93,108,.08)}
+.finds{flex:1;min-width:260px;font:13px/1.8 var(--mono);color:var(--mut)}
+.finds div::before{content:"FAIL  ";color:var(--rd);font-weight:600}
+.finds div.w::before{content:"WARN  ";color:var(--am)}
+
+/* mutation */
+.mut2{display:grid;grid-template-columns:1fr 1fr;gap:26px;margin-top:44px;align-items:start}
+@media(max-width:900px){.mut2{grid-template-columns:1fr}}
+pre.code{font:13.5px/1.7 var(--mono);color:var(--mut);background:#070c18;border:1px solid var(--line);border-radius:12px;padding:16px;overflow:auto}
+pre.code .k{color:var(--vi)}pre.code .f{color:var(--cy)}pre.code .n{color:var(--am)}
+pre.code .hl{background:rgba(255,93,108,.18);color:var(--rd);border-radius:4px;padding:0 3px}
+.mgrid{display:grid;grid-template-columns:repeat(8,1fr);gap:8px;margin:16px 0}
+.mgrid i{aspect-ratio:1;border-radius:8px;background:var(--panel);border:1px solid var(--line2);transition:.4s;display:block}
+.mgrid i.c{background:rgba(74,222,128,.2);border-color:var(--gr);box-shadow:0 0 12px rgba(74,222,128,.25)}
+.mgrid i.s{background:rgba(255,180,84,.2);border-color:var(--am);box-shadow:0 0 12px rgba(255,180,84,.3)}
+.score{display:flex;gap:22px;flex-wrap:wrap;font:13px var(--mono);color:var(--mut)}
+.score b{font-size:26px;display:block;font-family:var(--sans);letter-spacing:-.02em}
+.score .g b{color:var(--gr)}.score .a b{color:var(--am)}
+
+/* publish rails */
+.rails{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-top:44px}
+.rail{padding:22px;position:relative;overflow:hidden}
+.rail .n{font:600 11px var(--mono);color:var(--dim);letter-spacing:.14em}
+.rail h3{font-size:20px;margin:10px 0 8px;letter-spacing:-.01em}
+.rail p{color:var(--mut);font-size:15px}
+.rail .ic{position:absolute;right:16px;top:14px;font-size:26px;opacity:.9}
+.rail.lit{border-color:var(--cy);box-shadow:0 0 30px rgba(90,209,255,.12)}
+.pubbar{margin-top:18px;display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.pubstat{font:13px var(--mono);color:var(--mut)}
+
+/* role + learned */
+.tl{margin-top:44px;display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
+.tl .card h3{font-size:19px;margin-bottom:8px;letter-spacing:-.01em}
+.tl .card p{color:var(--mut);font-size:15px}
+.tl .card .big{font-size:42px;font-weight:700;color:var(--cy);letter-spacing:-.03em;line-height:1;margin-bottom:10px}
+.learn{margin-top:44px;display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px}
+.learn .card{display:flex;gap:16px}
+.learn .card .q{font:700 22px var(--mono);color:var(--cy);flex:none}
+.learn .card h3{font-size:18px;margin-bottom:6px}
+.learn .card p{color:var(--mut);font-size:15px}
+.honest{margin-top:30px;border-left:3px solid var(--am);padding:6px 0 6px 20px;max-width:760px}
+.honest h3{font:600 12px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--am);margin-bottom:8px}
+.honest li{color:var(--mut);margin:6px 0 6px 18px;font-size:16px}
+footer{max-width:1180px;margin:0 auto;padding:40px 24px 80px;color:var(--dim);font:12px/1.8 var(--mono);border-top:1px solid var(--line)}
+
+/* ---------- 3D ---------- */
+.s3d{perspective:1700px;display:grid;place-items:center;position:relative;height:100%}
+.sc{position:relative;width:420px;height:270px;transform-style:preserve-3d;transform:rotateX(var(--rx,58deg)) rotateZ(var(--rz,-35deg));--gap:90px}
+.sc.co{--gap:20px}
+.ly{position:absolute;inset:0;border-radius:18px;border:1.5px solid var(--c);
+  background:linear-gradient(135deg,color-mix(in srgb,var(--c) 16%,transparent),rgba(8,13,28,.62));
+  box-shadow:0 0 34px color-mix(in srgb,var(--c) 20%,transparent),inset 0 0 30px color-mix(in srgb,var(--c) 8%,transparent);
+  transform:translateZ(calc(var(--i)*var(--gap) + var(--lift,0px)));
+  transition:transform .7s cubic-bezier(.2,.8,.2,1),box-shadow .3s,border-width .2s;cursor:pointer}
+.ly:hover{box-shadow:0 0 50px color-mix(in srgb,var(--c) 38%,transparent),inset 0 0 30px color-mix(in srgb,var(--c) 14%,transparent)}
+.ly.act{--lift:34px;border-width:2.6px;box-shadow:0 0 70px color-mix(in srgb,var(--c) 48%,transparent),inset 0 0 36px color-mix(in srgb,var(--c) 16%,transparent)}
+.ly .lb{position:absolute;left:18px;top:13px;font:700 12px var(--mono);letter-spacing:.16em;color:var(--c)}
+.ly .in{position:absolute;left:18px;right:18px;top:42px;bottom:16px}
+.pg{display:grid;grid-template-columns:repeat(8,1fr);gap:7px;height:100%;align-content:center}
+.pg i{aspect-ratio:1;border-radius:5px;border:1px solid color-mix(in srgb,var(--c) 50%,transparent);background:color-mix(in srgb,var(--c) 10%,transparent)}
+.rl{position:relative;height:20px;margin:15px 0;border-top:2px solid var(--c);opacity:.9}
+.rl b{position:absolute;top:-6px;left:0;width:10px;height:10px;border-radius:50%;background:var(--c);box-shadow:0 0 12px var(--c);animation:rail 3.2s linear infinite}
+.rl:nth-child(2) b{animation-delay:-1.1s}.rl:nth-child(3) b{animation-delay:-2.1s}
+@keyframes rail{to{left:calc(100% - 10px)}}
+.rw{height:22px;border-radius:7px;border:1px solid color-mix(in srgb,var(--c) 55%,transparent);margin:9px 0;background:linear-gradient(90deg,color-mix(in srgb,var(--c) 28%,transparent),transparent);position:relative}
+.rw::after{content:"";position:absolute;left:8px;top:8px;width:34%;height:4px;border-radius:2px;background:color-mix(in srgb,var(--c) 70%,transparent)}
+.ag{display:flex;gap:10px;height:100%;align-items:center}
+.ag .g1,.ag .g2{display:flex;flex-wrap:wrap;gap:6px;align-content:center}
+.ag .g1{flex:7}.ag .g2{flex:3}
+.ag i{width:36px;height:30px;border-radius:7px;border:1px solid var(--c);background:color-mix(in srgb,var(--c) 12%,transparent)}
+.ag .g2 i{border-color:var(--gr);background:color-mix(in srgb,var(--gr) 12%,transparent)}
+.ag .fw{width:0;align-self:stretch;border-left:2px dashed var(--rd);opacity:.85}
+.hd{display:flex;gap:20px;justify-content:center;align-items:center;height:100%}
+.hd i{width:52px;height:52px;border-radius:50%;border:2px solid var(--c);display:grid;place-items:center;font-style:normal;font-size:22px;color:var(--c);background:color-mix(in srgb,var(--c) 10%,transparent)}
+.stack{display:grid;grid-template-columns:1.35fr 1fr;gap:26px;margin-top:40px;align-items:center}
+@media(max-width:960px){.stack{grid-template-columns:1fr}}
+.stackview{height:660px;position:relative;cursor:grab;border:1px solid var(--line);border-radius:20px;background:radial-gradient(500px 300px at 50% 55%,rgba(90,209,255,.07),transparent 70%),rgba(8,13,28,.5);overflow:hidden;touch-action:none}
+.stackview:active{cursor:grabbing}
+.stackview .sc{--gap:78px;margin-top:100px}
+.stackview .sc.co{--gap:18px}
+.stackbtns{position:absolute;left:16px;bottom:14px;display:flex;gap:10px;align-items:center}
+.layerlist{display:flex;flex-direction:column;gap:8px;margin-bottom:14px}
+.lli{display:flex;gap:12px;align-items:center;padding:11px 14px;border:1px solid var(--line);border-radius:12px;background:var(--panel);cursor:pointer;transition:.25s;font-size:15px}
+.lli i{width:12px;height:12px;border-radius:4px;background:var(--c);box-shadow:0 0 10px var(--c);flex:none}
+.lli:hover{border-color:var(--c)}
+.lli.act{border-color:var(--c);background:color-mix(in srgb,var(--c) 10%,var(--panel));transform:translateX(6px)}
+.big2{font-size:21px;font-weight:600;margin-bottom:6px}
+.hero3d{position:absolute;right:-230px;top:10%;width:620px;height:620px;opacity:.8;pointer-events:none}
+.hero3d .sc{--gap:62px;width:350px;height:230px}
+.hero3d .ly .in{display:none}
+.hero3d .sc.spin{animation:spin 46s linear infinite}
+@keyframes spin{from{transform:rotateX(58deg) rotateZ(-35deg)}to{transform:rotateX(58deg) rotateZ(325deg)}}
+@media(max-width:1100px){.hero3d{display:none}}
+@media(prefers-reduced-motion:reduce){.hero3d .sc.spin{animation:none}.rl b{animation:none}}
+
+/* ---------- ADDITIONS ---------- */
+#topbar{position:fixed;left:0;top:0;height:3px;width:0;background:linear-gradient(90deg,var(--cy),var(--vi));z-index:50;box-shadow:0 0 12px var(--cy)}
+.rt{display:grid;grid-template-columns:1fr 1.4fr;gap:22px;margin-top:40px;align-items:stretch}
+@media(max-width:900px){.rt{grid-template-columns:1fr}}
+.seg{display:inline-flex;flex-wrap:wrap;border:1px solid var(--line2);border-radius:12px;overflow:hidden}
+.seg button{background:transparent;color:var(--mut);border:0;padding:11px 18px;font-size:14px;font-weight:500;transition:.2s}
+.seg button.on{background:rgba(90,209,255,.14);color:var(--cy)}
+.routeflow{margin-top:18px;font-size:12px;color:var(--dim);line-height:2}
+.routeflow b{color:var(--cy);font-weight:600}
+.models{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:560px){.models{grid-template-columns:1fr}}
+.mdl{padding:22px;border:1.5px solid var(--line);border-radius:16px;background:var(--panel);transition:.35s;position:relative;cursor:pointer}
+.mdl .mi{font-size:26px;color:var(--cy);margin-bottom:8px}
+.mdl h3{font-size:20px;margin-bottom:10px}
+.mdl ul{list-style:none;color:var(--mut);font-size:14.5px}.mdl li{padding:4px 0}
+.mdl .mstat{margin-top:14px;font:600 11px var(--mono);letter-spacing:.12em;min-height:16px}
+.mdl.sel{border-color:var(--cy);box-shadow:0 0 34px rgba(90,209,255,.2);transform:translateY(-3px)}
+.mdl.sel .mstat{color:var(--cy)}
+.mdl.lock{opacity:.5;cursor:not-allowed;border-style:dashed;border-color:var(--rd)}
+.mdl.lock .mstat{color:var(--rd)}
+.rwbar{display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;padding:14px 18px;border-radius:12px;border:1px solid var(--gr);background:rgba(74,222,128,.07);color:var(--gr);font-size:13px;transition:.4s;margin-bottom:18px}
+.rwbar.bad{border-color:var(--rd);background:rgba(255,93,108,.08);color:var(--rd)}
+.rwrow{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.pc{padding:14px 16px;border-radius:12px;border:1.5px solid var(--gr);background:rgba(74,222,128,.07);font-size:14px;font-weight:600;min-width:104px;text-align:center;transition:.4s}
+.pc small{display:block;font:400 11px var(--mono);margin-top:3px;color:var(--gr)}
+.pc.bad{border-color:var(--rd);background:rgba(255,93,108,.1)}.pc.bad small{color:var(--rd)}
+.pc.stale{border-color:var(--am);background:rgba(255,180,84,.08)}.pc.stale small{color:var(--am)}
+.pc.run{border-color:var(--cy);background:rgba(90,209,255,.1);animation:pu 1.1s infinite}.pc.run small{color:var(--cy)}
+.rwarrow{color:var(--dim);font-family:var(--mono)}
+.rwlog{margin:18px 0;padding:14px 16px;border:1px solid var(--line);border-radius:12px;background:#070c18;font-size:13px;line-height:1.8;color:var(--mut);min-height:64px}
+.rwlog b{color:var(--cy);font-weight:600}.rwlog i{font-style:normal;color:var(--gr)}.rwlog u{text-decoration:none;color:var(--rd)}.rwlog s{text-decoration:none;color:var(--am)}
+.outgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-top:40px}
+.oc b{font:600 11px var(--mono);color:var(--cy);letter-spacing:.14em}
+.oc h3{font-size:19px;margin:8px 0 6px}.oc p{color:var(--mut);font-size:15px}
+.road{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;margin-top:40px}
+.road ul{list-style:none;margin-top:12px}.road li{padding:8px 0 8px 18px;border-bottom:1px solid var(--line);color:var(--mut);font-size:15px;position:relative}
+.road li:last-child{border:0}.road li::before{content:"";position:absolute;left:0;top:16px;width:7px;height:7px;border-radius:50%;background:var(--dim)}
+.rh{font:600 12px var(--mono);letter-spacing:.16em;text-transform:uppercase}
+.rh.d{color:var(--gr)}.road .rh.d~ul li::before{background:var(--gr)}
+.rh.w{color:var(--am)}.rh.n{color:var(--cy)}
+
+.jump{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:34px}
+.jump span{font-size:11px;letter-spacing:.16em;color:var(--dim);margin-right:6px}
+.jump a{color:var(--ink);text-decoration:none;font-size:14px;padding:8px 14px;border:1px solid var(--line2);border-radius:999px;transition:.2s;background:rgba(13,21,39,.6)}
+.jump a:hover{border-color:var(--cy);color:var(--cy);background:rgba(90,209,255,.07)}
+.node:focus-visible rect{stroke:var(--cy);stroke-width:3}.node:focus{outline:none}
+.mcpband:focus-visible .mcprect{stroke:var(--cy);stroke-width:3}.mcpband:focus{outline:none}
+.ly:focus-visible{outline:2px solid var(--cy);outline-offset:3px}
+.lli:focus-visible,.mdl:focus-visible,.jump a:focus-visible,.btn:focus-visible,.seg button:focus-visible{outline:2px solid var(--cy);outline-offset:2px}
+.skip{position:absolute;left:-999px;top:8px;background:var(--cy);color:#04121c;padding:8px 14px;border-radius:8px;z-index:100;font-weight:600}
+.skip:focus{left:8px}
+
+.gl{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;margin-top:40px}
+.gl h3{font-size:18px;margin-bottom:8px;color:var(--cy)}.gl p{color:var(--mut);font-size:15px}
+</style>
+</head>
+<body>
+<a class="skip" href="#s2">Skip to the live diagram</a>
+<div id="topbar"></div>
+
+<nav id="nav"></nav>
+
+<main>
+
+<!-- HERO -->
+<section class="hero" id="s0" data-nav="Start">
+  <div class="heroviz hero3d" aria-hidden="true"><div class="s3d"><div class="sc ex spin" id="heroSc"></div></div></div>
+  <div class="eyebrow"><i></i>Agentic Engineering Workflow · design walkthrough</div>
+  <h1 class="rv">An engineering team <span>made of agents.</span></h1>
+  <p class="rv">A design for writing safety-critical software documents and code with AI agents, where a person approves each step and an independent team checks the work.</p>
+  <div class="stats rv">
+    <div class="stat"><b data-n="7">0</b><span>development agents</span></div>
+    <div class="stat"><b data-n="3">0</b><span>independent compliance agents</span></div>
+    <div class="stat"><b data-n="1">0</b><span>record that crosses the firewall</span></div>
+    <div class="stat"><b data-n="5">0</b><span>guards before anything is published</span></div>
+  </div>
+  <div class="jump rv">
+    <span class="mono">JUMP TO</span>
+    <a href="#s2">Watch it run</a><a href="#s2b">Explore the stack</a><a href="#s4">Try the firewall</a><a href="#s5">Break the audit</a><a href="#sout">What comes out</a><a href="#sroad">Where it stands</a>
+  </div>
+  <div class="scrollhint">SCROLL</div>
+</section>
+
+<!-- IDEA -->
+<section id="s1" data-nav="The idea">
+  <div class="tag">01 · The idea</div>
+  <h2 class="rv">Build it the way a <em>real engineering team</em> is built.</h2>
+  <p class="lede rv">Software for aircraft is not written by one person. It is written by people with separate jobs, and checked by other people who report to someone else. This design copies that structure with agents, so the same checks and balances apply.</p>
+  <div class="pair rv">
+    <div class="col">
+      <h3>The human team</h3>
+      <div class="role h"><div class="dot">☰</div><div>Requirements engineer<small>writes what the system must do</small></div></div>
+      <div class="role h"><div class="dot">◇</div><div>Design engineer<small>decides how it will be built</small></div></div>
+      <div class="role h"><div class="dot">{ }</div><div>Software engineer<small>writes the code and unit tests</small></div></div>
+      <div class="role h"><div class="dot">☑</div><div>Verification engineer<small>writes and runs the test procedures</small></div></div>
+      <div class="role h"><div class="dot">★</div><div>QA<small>audits, and reports outside the project</small></div></div>
+    </div>
+    <div class="mid"><span>→</span><span>→</span><span>→</span><span>→</span><span>→</span></div>
+    <div class="col">
+      <h3>The agent team</h3>
+      <div class="role a"><div class="dot">☰</div><div>REQ agent<small>one requirement per behavior in the brief</small></div></div>
+      <div class="role a"><div class="dot">◇</div><div>Design agent<small>low-level requirements and module notes</small></div></div>
+      <div class="role a"><div class="dot">{ }</div><div>Coding + unit test agent<small>source that builds, with tests</small></div></div>
+      <div class="role a"><div class="dot">☑</div><div>Test procedure + test code agents<small>cases, then runnable test code</small></div></div>
+      <div class="role a"><div class="dot">★</div><div>Checker, Verification, QA agents<small>a separate team that only reads the record</small></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ORG DIAGRAM -->
+<section id="s2" data-nav="The org">
+  <div class="tag">02 · The org, running</div>
+  <h2 class="rv">Press play and <em>watch a project move</em> through the team.</h2>
+  <p class="lede rv">Every agent writes to one shared record and tells the Orchestrator it is done. The Orchestrator releases whoever is next. Nobody talks to anybody directly. The amber layer underneath is MCP, the connector to the certification platform. Click any box to see what it does, then publish at the end.</p>
+
+  <div class="card stage rv">
+    <div class="stagebar">
+      <button class="btn pri" id="playBtn">▶ Play a run</button>
+      <button class="btn" id="resetBtn">Reset</button>
+      <button class="btn" id="modeBtn" style="border-color:var(--vi);color:var(--vi)">Mode: stage, publish at end</button>
+      <button class="btn" id="autoBtn">Auto-replay: on</button>
+      <button class="btn" id="pubMcp" disabled style="border-color:var(--am);color:var(--am)">Publish through MCP</button>
+      <span class="mono" style="font-size:12px;color:var(--dim)" id="runlabel">Example brief: landing gear position indication (invented)</span>
+      <span class="mono" style="font-size:12px;color:var(--cy)" id="autoLbl"></span>
+      <span class="sp"></span>
+      <span class="verdict" id="verdict">Audit not run yet</span>
+    </div>
+    <div class="progress"><i id="prog"></i></div>
+    <p id="modeNote" style="font-size:14px;color:var(--mut);margin:0 0 12px"></p>
+
+    <svg id="orgsvg" viewBox="0 0 1100 650" role="img" aria-label="Org diagram of development and compliance agent teams">
+      <defs>
+        <marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#2b3f6b"/></marker>
+        <marker id="ahc" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#5ad1ff"/></marker>
+        <marker id="ahg" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#4ade80"/></marker>
+      </defs>
+
+      <rect class="orch" x="40" y="18" width="640" height="56" rx="12"/>
+      <text class="orcht" x="60" y="42">ORCHESTRATOR · deterministic, no model</text>
+      <text class="orchs" x="60" y="62">Gets a pointer when an agent finishes. Releases the next one.</text>
+
+      <rect class="zone" x="30" y="100" width="725" height="430" rx="18"/>
+      <text class="zt" x="52" y="128">DEVELOPMENT TEAM</text>
+      <rect class="zone" x="905" y="100" width="170" height="430" rx="18"/>
+      <text class="zt" x="925" y="128">COMPLIANCE TEAM</text>
+
+      <!-- chain arrows -->
+      <g id="arrows" marker-end="url(#ah)">
+        <path class="arr" id="a1" d="M180 187H215" marker-end="url(#ah)"/>
+        <path class="arr" id="a2" d="M335 187H370" marker-end="url(#ah)"/>
+        <path class="arr" id="a3" d="M490 187H525" marker-end="url(#ah)"/>
+        <path class="arr" id="a4" d="M585 214C585 260 500 270 500 318" marker-end="url(#ah)"/>
+        <path class="arr" id="a5" d="M615 214C615 260 670 270 670 318" marker-end="url(#ah)"/>
+        <path class="arr" id="a6" d="M670 372V440" marker-end="url(#ah)"/>
+      </g>
+
+      <!-- ghost paths for packets to record -->
+      <path class="ghost" id="g_intake" d="M120 214C120 300 300 330 790 300"/>
+      <path class="ghost" id="g_planner" d="M275 214C275 300 400 330 790 300"/>
+      <path class="ghost" id="g_req" d="M430 214C430 290 600 320 790 300"/>
+      <path class="ghost" id="g_design" d="M585 214C640 240 700 270 790 296"/>
+      <path class="ghost" id="g_coding" d="M560 345C640 340 720 320 790 302"/>
+      <path class="ghost" id="g_testproc" d="M730 345C750 335 770 320 790 306"/>
+      <path class="ghost" id="g_testcode" d="M730 467C760 440 780 380 805 335"/>
+      <path class="ghost" id="r_checker" d="M870 285C890 250 910 215 935 190"/>
+      <path class="ghost" id="r_adequacy" d="M870 300C890 300 910 300 935 300"/>
+      <path class="ghost" id="r_qa" d="M870 315C890 360 910 395 935 415"/>
+      <!-- visible read/write lines -->
+      <path class="arr" d="M560 345C640 340 720 320 786 302" marker-end="url(#ah)" opacity=".5"/>
+      <path class="arr" d="M730 345C750 335 770 320 786 306" marker-end="url(#ah)" opacity=".5"/>
+      <path class="arr" d="M730 467C760 440 780 380 805 334" marker-end="url(#ah)" opacity=".5"/>
+      <path class="arr" d="M872 285C890 250 910 215 932 192" stroke="#1f6b45" marker-end="url(#ahg)"/>
+      <path class="arr" d="M872 300H932" stroke="#1f6b45" marker-end="url(#ahg)"/>
+      <path class="arr" d="M872 315C890 360 910 395 932 413" stroke="#1f6b45" marker-end="url(#ahg)"/>
+      <text class="zt" x="790" y="232" fill="#4a8" style="fill:#5b7aa0;font-size:10px">WRITES ←</text>
+      <text class="zt" x="885" y="232" style="fill:#3f9a68;font-size:10px">READS →</text>
+
+      <!-- firewall -->
+      <line class="wall" x1="830" y1="86" x2="830" y2="530"/>
+      <text class="wallt" x="830" y="82" text-anchor="middle">FIREWALL · ONLY THE RECORD CROSSES</text>
+
+      <!-- record -->
+      <g class="rec" id="recGroup">
+        <path d="M790 262V318C790 330 870 330 870 318V262"/>
+        <ellipse cx="830" cy="262" rx="40" ry="11"/>
+        <text x="830" y="296" text-anchor="middle">RECORD</text>
+        <text class="s" x="830" y="312" text-anchor="middle" id="reccount">0 items</text>
+      </g>
+
+      <!-- nodes -->
+      <g class="node" id="n_intake" data-k="intake"><rect x="60" y="160" width="120" height="54" rx="12"/><text class="ic" x="76" y="192">✉</text><text class="nm" x="98" y="185">intake</text><text class="st" x="98" y="202">waiting</text></g>
+      <g class="node" id="n_planner" data-k="planner"><rect x="215" y="160" width="120" height="54" rx="12"/><text class="ic" x="231" y="192">✎</text><text class="nm" x="253" y="185">planner</text><text class="st" x="253" y="202">waiting</text></g>
+      <g class="node" id="n_req" data-k="req"><rect x="370" y="160" width="120" height="54" rx="12"/><text class="ic" x="386" y="192">☰</text><text class="nm" x="408" y="185">req</text><text class="st" x="408" y="202">waiting</text></g>
+      <g class="node" id="n_design" data-k="design"><rect x="525" y="160" width="120" height="54" rx="12"/><text class="ic" x="541" y="192">◇</text><text class="nm" x="563" y="185">design</text><text class="st" x="563" y="202">waiting</text></g>
+      <g class="node" id="n_coding" data-k="coding"><rect x="440" y="318" width="120" height="54" rx="12"/><text class="ic" x="454" y="350">{ }</text><text class="nm" x="480" y="343">coding + ut</text><text class="st" x="480" y="360">waiting</text></g>
+      <g class="node" id="n_testproc" data-k="testproc"><rect x="610" y="318" width="120" height="54" rx="12"/><text class="ic" x="624" y="350">☑</text><text class="nm" x="646" y="343">test proc.</text><text class="st" x="646" y="360">waiting</text></g>
+      <g class="node" id="n_testcode" data-k="testcode"><rect x="610" y="440" width="120" height="54" rx="12"/><text class="ic" x="624" y="472">▶</text><text class="nm" x="646" y="465">test code</text><text class="st" x="646" y="482">waiting</text></g>
+
+      <g class="node" id="n_checker" data-k="checker"><rect x="925" y="162" width="130" height="54" rx="12"/><text class="ic" x="940" y="194">✔</text><text class="nm" x="964" y="187">checker</text><text class="st" x="964" y="204">waiting</text></g>
+      <g class="node" id="n_adequacy" data-k="adequacy"><rect x="925" y="274" width="130" height="54" rx="12"/><text class="ic" x="940" y="306">⚖</text><text class="nm" x="964" y="299">adequacy</text><text class="st" x="964" y="316">waiting</text></g>
+      <g class="node" id="n_qa" data-k="qa"><rect x="925" y="390" width="130" height="54" rx="12"/><text class="ic" x="940" y="422">★</text><text class="nm" x="964" y="415">qa</text><text class="st" x="964" y="432">waiting</text></g>
+
+      <!-- compliance findings back to the record (own area) -->
+      <defs><marker id="ahv" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#a78bfa"/></marker></defs>
+      <path class="arr" id="f_checker" d="M936 214C912 242 892 270 872 292" stroke="#6d58b8" stroke-dasharray="4 4" marker-end="url(#ahv)"/>
+      <path class="arr" id="f_adequacy" d="M932 314H872" stroke="#6d58b8" stroke-dasharray="4 4" marker-end="url(#ahv)"/>
+      <path class="arr" id="f_qa" d="M936 402C912 382 892 348 872 324" stroke="#6d58b8" stroke-dasharray="4 4" marker-end="url(#ahv)"/>
+      <text class="zt" x="884" y="352" style="fill:#8f7be0;font-size:10px">FINDINGS ←</text>
+      <text class="zt" x="884" y="364" style="fill:#6d58b8;font-size:9px">own area only</text>
+      <!-- MCP layer -->
+      <path class="arr" id="m_down" d="M815 332V558" marker-end="url(#ah)" stroke="#8a6a2f"/>
+      <text class="zt" x="804" y="455" text-anchor="end" style="fill:#c9913f;font-size:10px">VIA MCP</text>
+      <g class="mcpband" id="mcpband">
+        <rect class="mcprect" x="30" y="560" width="800" height="72" rx="14"/>
+        <text class="orcht mt" x="52" y="584">MCP · MODEL CONTEXT PROTOCOL</text>
+        <text class="orchs" x="52" y="604">Agents and the platform speak through a short list of tools.</text>
+        <text class="zt" id="mcpmode" x="52" y="622" style="fill:#ffb454">STAGING · calls are planned, nothing is sent</text>
+        <rect x="450" y="574" width="165" height="26" rx="8" fill="none" stroke="#2b3f6b"/>
+        <text x="532" y="591" text-anchor="middle" style="font:11px JetBrains Mono,monospace;fill:#8a9bc0">create + read tools</text>
+        <rect x="625" y="574" width="165" height="26" rx="8" fill="none" stroke="#2b3f6b"/>
+        <text x="707" y="591" text-anchor="middle" style="font:11px JetBrains Mono,monospace;fill:#8a9bc0">no update, no delete</text>
+      </g>
+      <path class="arr" id="m_pub" d="M830 596H956" marker-end="url(#ah)" stroke="#8a6a2f"/>
+      <path class="ghost" id="r_back" d="M956 606H830"/>
+      <g id="gate" class="gate locked">
+        <path d="M893 586L903 596L893 606L883 596Z"/>
+        <text id="gt1" x="893" y="571" text-anchor="middle">AUDIT</text>
+        <text id="gt2" x="893" y="581" text-anchor="middle">GATE</text>
+      </g>
+      <g class="rec" id="platGroup">
+        <path d="M960 584V614C960 626 1050 626 1050 614V584" style="stroke:#ffb454"/>
+        <ellipse cx="1005" cy="584" rx="45" ry="11" style="stroke:#ffb454"/>
+        <text x="1005" y="607" text-anchor="middle" style="fill:#ffb454">PLATFORM</text>
+        <text class="s" x="1005" y="621" text-anchor="middle" id="platcount">0 records</text>
+      </g>
+      <g id="pkts"></g>
+    </svg>
+
+    <div class="detail">
+      <div class="card"><h4>Selected agent</h4><div class="big" id="dName">Click any box</div><p id="dText" class="mut">Each agent has one job, reads from the record, and writes back to it after a person approves.</p></div>
+      <div class="card"><h4>Reads</h4><p id="dReads" class="mut">The record only</p></div>
+      <div class="card"><h4>Writes</h4><p id="dWrites" class="mut">Its own items, after a human gate</p></div>
+    </div>
+    <div class="log" id="orgLog"><div>Ready. Press play to start a run.</div></div>
+  </div>
+</section>
+
+<!-- STACK -->
+<section id="s2b" data-nav="The stack">
+  <div class="tag">03 · The whole stack</div>
+  <h2 class="rv">Five layers, and <em>a person on top.</em></h2>
+  <p class="lede rv">The same system seen from the side. Drag to turn it, pull the layers apart, and click one to see what it does.</p>
+  <div class="stack rv">
+    <div class="stackview" id="stackview">
+      <div class="s3d"><div class="sc ex" id="mainSc"></div></div>
+      <div class="stackbtns">
+        <button class="btn pri" id="exBtn">Collapse</button>
+        <button class="btn" id="spinBtn">Reset view</button>
+        <span class="mono" style="font-size:12px;color:var(--dim)">drag to rotate</span>
+      </div>
+    </div>
+    <div class="stackside">
+      <div class="layerlist" id="layerlist"></div>
+      <div class="card" id="layerDetail"><h4 class="mono" style="font-size:11px;letter-spacing:.14em;color:var(--dim);text-transform:uppercase;margin-bottom:8px">Selected layer</h4><div class="big2" id="ldName">Click a layer</div><p id="ldText" style="color:var(--mut);font-size:15px">Each layer only talks to the one directly below it. A person sits above all of them.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- AGENT CYCLE -->
+<section id="s3" data-nav="One agent">
+  <div class="tag">04 · Anatomy of one agent</div>
+  <h2 class="rv">Every agent runs the <em>same loop.</em></h2>
+  <p class="lede rv">Pull the input, draft, check it, ask a person, write it down, tell the Orchestrator. If the person asks for changes, the loop goes around again with their words attached.</p>
+  <div class="cyclewrap rv">
+    <div class="card">
+      <svg viewBox="0 0 620 420" id="cycsvg" role="img" aria-label="Agent cycle diagram">
+        <defs><marker id="cah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#2b3f6b"/></marker></defs>
+        <path class="arr" d="M150 70H215" marker-end="url(#cah)"/>
+        <path class="arr" d="M345 70H410" marker-end="url(#cah)"/>
+        <path class="arr" d="M475 98V158" marker-end="url(#cah)"/>
+        <path class="arr" d="M475 238V298" marker-end="url(#cah)"/>
+        <path class="arr" d="M410 340H345" marker-end="url(#cah)"/>
+        <path class="arr" d="M215 340H150" marker-end="url(#cah)"/>
+        <path d="M410 198C330 198 280 180 280 112" fill="none" stroke="#ffb454" stroke-width="1.6" stroke-dasharray="5 5" marker-end="url(#cah)"/>
+        <text x="300" y="190" fill="#ffb454" font-family="JetBrains Mono,monospace" font-size="11">changes requested</text>
+        <path d="M262 40C262 8 322 8 322 40" fill="none" stroke="#2b3f6b" stroke-width="1.6" marker-end="url(#cah)"/>
+        <text x="292" y="6" text-anchor="middle" fill="#8a9bc0" font-family="JetBrains Mono,monospace" font-size="10">self-check loop</text>
+        <g class="cn" id="c0"><rect x="20" y="40" width="130" height="60" rx="12"/><text x="85" y="67" text-anchor="middle">Input</text><text class="s" x="85" y="85" text-anchor="middle">from record</text></g>
+        <g class="cn" id="c1"><rect x="215" y="40" width="130" height="60" rx="12"/><text x="280" y="67" text-anchor="middle">Draft</text><text class="s" x="280" y="85" text-anchor="middle">cloud or local model</text></g>
+        <g class="cn" id="c2"><rect x="410" y="40" width="130" height="60" rx="12"/><text x="475" y="67" text-anchor="middle">Self-check</text><text class="s" x="475" y="85" text-anchor="middle">gaps, duplicates</text></g>
+        <g class="cn gate" id="c3"><rect x="410" y="158" width="130" height="80" rx="40"/><text x="475" y="194" text-anchor="middle">Human gate</text><text class="s" x="475" y="212" text-anchor="middle">approve or edit</text></g>
+        <g class="cn" id="c4"><rect x="410" y="300" width="130" height="60" rx="12"/><text x="475" y="327" text-anchor="middle">Write</text><text class="s" x="475" y="345" text-anchor="middle">record, via MCP</text></g>
+        <g class="cn" id="c5"><rect x="215" y="310" width="130" height="60" rx="12"/><text x="280" y="337" text-anchor="middle">Notify</text><text class="s" x="280" y="355" text-anchor="middle">a pointer, not data</text></g>
+        <g class="cn" id="c6"><rect x="20" y="310" width="130" height="60" rx="12"/><text x="85" y="337" text-anchor="middle">Next agent</text><text class="s" x="85" y="355" text-anchor="middle">pulls from record</text></g>
+        <circle id="cdot" r="7" fill="#5ad1ff" cx="85" cy="70" style="filter:drop-shadow(0 0 8px #5ad1ff);transition:all .7s cubic-bezier(.4,0,.2,1)"/>
+      </svg>
+      <div class="cycbtns">
+        <button class="btn pri" id="cycNext">Next step →</button>
+        <button class="btn" id="cycReset">Restart</button>
+        <button class="btn bad" id="cycChange" style="display:none">Ask for changes</button>
+        <button class="btn" id="cycApprove" style="display:none;border-color:var(--gr);color:var(--gr)">Approve ✓</button>
+      </div>
+    </div>
+    <ol class="steps" id="cycSteps">
+      <li data-i="0"><b>01</b><span>The agent pulls its input from the record. It never gets a handoff payload from another agent.</span></li>
+      <li data-i="1"><b>02</b><span>It drafts with a model. A person chooses cloud or local for the whole run.</span></li>
+      <li data-i="2"><b>03</b><span>It checks its own draft for missing coverage and copied text, and redrafts before anyone sees it.</span></li>
+      <li data-i="3" class="gate"><b>04</b><span>A person reads the draft. They can approve, or type what to change and send it back around the loop.</span></li>
+      <li data-i="4"><b>05</b><span>Only after approval does the draft go to the record. The write is recorded with who approved it.</span></li>
+      <li data-i="5"><b>06</b><span>The agent tells the Orchestrator it finished. The note is a pointer to the record.</span></li>
+      <li data-i="6"><b>07</b><span>The Orchestrator releases the next agent, which reads what was just written.</span></li>
+    </ol>
+  </div>
+</section>
+
+<!-- ROUTE -->
+<section id="sroute" data-nav="Where it runs">
+  <div class="tag">00 · Where the model runs</div>
+  <h2 class="rv">The model runs where the project <em>allows it.</em></h2>
+  <p class="lede rv">The planner picks cloud or local once, for the whole run. For restricted work the choice is made for you, and the code enforces it instead of a policy document.</p>
+  <div class="rt rv">
+    <div class="card">
+      <div class="mono" style="font-size:11px;letter-spacing:.14em;color:var(--dim);text-transform:uppercase;margin-bottom:12px">This project is</div>
+      <div class="seg" id="projSeg"><button class="on" data-p="open">Open</button><button data-p="restricted">Restricted (export-controlled)</button></div>
+      <p id="routeNote" style="color:var(--mut);font-size:15px;margin-top:18px"></p>
+      <div class="routeflow mono" id="routeFlow"></div>
+    </div>
+    <div class="models">
+      <div class="mdl" id="mdlCloud" data-m="cloud"><div class="mi">☁</div><h3>Cloud model</h3><ul><li>Stronger and faster</li><li>Data leaves the machine</li><li>Good for open projects</li></ul><div class="mstat" id="stCloud"></div></div>
+      <div class="mdl" id="mdlLocal" data-m="local"><div class="mi">▣</div><h3>Local model</h3><ul><li>Everything stays on the machine</li><li>Smaller, so jobs are kept narrow</li><li>Required for restricted work</li><li>Checked before the run: reachable, installed, loaded</li><li>Restricted runs: the operating system blocks everything except this machine</li></ul><div class="mstat" id="stLocal"></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- FIREWALL -->
+<section id="s4" data-nav="Firewall">
+  <div class="tag">05 · The firewall</div>
+  <h2 class="rv">The team that builds it <em>cannot talk to</em> the team that checks it.</h2>
+  <p class="lede rv">In a real project, QA is not supposed to be friends with the person whose work they are auditing. The code enforces that. Try breaking it.</p>
+  <div class="fw rv">
+    <div class="card fwside dev"><h3>Development team</h3>
+      <span class="chip">intake</span><span class="chip">planner</span><span class="chip">req</span><span class="chip">design</span><span class="chip">coding + ut</span><span class="chip">test procedure</span><span class="chip">test code</span>
+      <p class="mut" style="color:var(--mut);font-size:15px;margin-top:6px">Writes to the record. Cannot see compliance findings.</p></div>
+    <div class="fwmid"><span>FIREWALL</span></div>
+    <div class="card fwside cmp"><h3>Compliance team</h3>
+      <span class="chip">checker</span><span class="chip">test adequacy</span><span class="chip">qa</span>
+      <p class="mut" style="color:var(--mut);font-size:15px;margin-top:6px">Reads the record. Writes findings to its own area. Uses no model, so nothing grades its own work.</p></div>
+  </div>
+  <div class="fwbtns rv">
+    <button class="btn" data-fw="0">Dev agent messages a compliance agent <em>try</em></button>
+    <button class="btn" data-fw="1">Compliance agent messages a dev agent <em>try</em></button>
+    <button class="btn" data-fw="2">Dev agent reads compliance findings <em>try</em></button>
+    <button class="btn" data-fw="3">Dev agent writes to the record <em>try</em></button>
+    <button class="btn" data-fw="4">Compliance agent reads the record <em>try</em></button>
+    <button class="btn" data-fw="5">Findings go back to a dev agent <em>try</em></button>
+  </div>
+  <div class="card fwlog rv" id="fwlog"><div class="row" style="color:var(--dim)">Pick an action above. Allowed and refused calls show up here.</div></div>
+  <div class="card rv" style="margin-top:18px">
+    <div class="mono" style="font-size:11px;letter-spacing:.14em;color:var(--dim);text-transform:uppercase;margin-bottom:10px">Two walls, not one</div>
+    <p style="color:var(--mut);font-size:15px;max-width:820px"><b style="color:var(--ink)">Wall one</b> is in the code: the teams cannot message each other or read each other's areas. <b style="color:var(--ink)">Wall two</b> is the operating system: the audit runs as its own process on a read-only copy of the record, with writes allowed only in its own folder and the network switched off. When it finishes, the real record is checked byte for byte. If anything changed, the audit is thrown away.</p>
+    <div class="mono" style="margin-top:18px;font-size:12px;letter-spacing:.14em;color:var(--dim);text-transform:uppercase">The compliance view, live</div>
+    <div class="cv" id="cv">
+      <div class="cvn wait" data-cv="0"><i></i><b>Checker</b><span class="q">Do all the links trace?</span><span class="st">waiting</span></div>
+      <div class="cvn wait" data-cv="1"><i></i><b>Test adequacy</b><span class="q">Do the tests catch defects?</span><span class="st">waiting</span></div>
+      <div class="cvn wait" data-cv="2"><i></i><b>QA</b><span class="q">Is it audit-ready?</span><span class="st">waiting</span></div>
+    </div>
+    <div class="cvgate wait" id="cvGate" aria-live="polite"><div class="cvgl">PUBLISH GATE</div><div class="cvgs" id="cvGs">WAITING</div><div class="cvgw" id="cvGw">The audit has not run yet.</div><div class="cvfp" id="cvFp"></div></div>
+    <div class="cycbtns">
+      <button class="btn pri" id="cvRun">Run the audit</button>
+      <button class="btn bad" id="cvEdit" disabled>Change one word in the record</button>
+      <button class="btn" id="cvReset">Reset</button>
+    </div>
+    <p style="color:var(--mut);font-size:14px;margin-top:12px">The gate opens only when the audit is clean <em>and</em> still matches the current record. Edit anything after the audit and it closes again until the audit is rerun. This is the same view the compliance team sees while a real audit runs.</p>
+  </div>
+</section>
+
+<!-- TRACEABILITY -->
+<section id="s5" data-nav="Traceability">
+  <div class="tag">06 · Proving it is complete</div>
+  <h2 class="rv">Every requirement has to <em>trace all the way down.</em></h2>
+  <p class="lede rv">Requirement, design, code, test, and test procedure. If any link is missing, the audit says so. Break something and watch the verdict change. The requirements below are invented for the example.</p>
+  <div class="mx card rv">
+    <div class="mxtop">
+      <button class="btn bad" id="mxDel">Delete the tests</button>
+      <button class="btn bad" id="mxStale">Change a requirement after the audit</button>
+      <button class="btn" id="mxReset">Put it back</button>
+      <span class="sp"></span>
+    </div>
+    <table id="mxTable">
+      <thead><tr><th>High-level requirement</th><th>Low-level</th><th>Code</th><th>Test case</th><th>Procedure</th></tr></thead>
+      <tbody></tbody>
+    </table>
+    <div class="audit">
+      <div class="badge" id="mxBadge">AUDIT READY</div>
+      <div class="finds" id="mxFinds"><span style="color:var(--dim)">No findings. Every requirement traces to code and to a test that exists.</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- MUTATION -->
+<section id="s6" data-nav="Do tests catch bugs">
+  <div class="tag">07 · Do the tests actually work?</div>
+  <h2 class="rv">A passing test proves nothing until you <em>break the code</em> on purpose.</h2>
+  <p class="lede rv">The verification agent makes small deliberate defects in a copy of the code, then checks whether the tests notice. Any defect the tests miss goes back to the test agent with the exact line. The counts here are illustrative.</p>
+  <div class="mut2 rv">
+    <div>
+<pre class="code"><span class="k">int</span> <span class="f">gear_warning</span>(<span class="k">int</span> alt_ft, <span class="k">int</span> gear_down) {
+    <span class="k">if</span> (alt_ft <span class="hl" id="op">&lt;</span> <span class="n">500</span> &amp;&amp; !gear_down) {
+        <span class="k">return</span> <span class="n">1</span>;   <span style="color:var(--dim)">/* warn */</span>
+    }
+    <span class="k">return</span> <span class="n">0</span>;
+}</pre>
+      <p style="color:var(--mut);font-size:15px;margin-top:14px">One mutation: change <span class="mono" style="color:var(--rd)">&lt;</span> to <span class="mono" style="color:var(--rd)">&lt;=</span>. A good test set fails at exactly 500 feet. A weak one never tries that value and the bug survives.</p>
+    </div>
+    <div class="card">
+      <div class="mono" style="font-size:12px;letter-spacing:.14em;color:var(--dim)">24 DELIBERATE DEFECTS</div>
+      <div class="mgrid" id="mgrid"></div>
+      <div class="score"><div class="g"><b id="mCaught">0</b>caught by the tests</div><div class="a"><b id="mSurv">0</b>survived</div><div><b id="mRound">-</b>round</div></div>
+      <div class="cycbtns" style="margin-top:16px">
+        <button class="btn pri" id="mRun">Run the check</button>
+        <button class="btn" id="mFix" disabled>Send survivors back to test agent</button>
+      </div>
+      <p id="mNote" style="margin-top:14px;color:var(--mut);font-size:14px;min-height:42px"></p>
+    </div>
+  </div>
+</section>
+
+<!-- REWORK -->
+<section id="srework" data-nav="Rework loop">
+  <div class="tag">00 · When the audit fails</div>
+  <h2 class="rv">A finding goes back to <em>the agent that owns it.</em></h2>
+  <p class="lede rv">Compliance never talks to development. A launcher, either a person or the run script, reads the findings and sends each one to the agent that wrote the item. Everything downstream of that agent reruns.</p>
+  <div class="card rv" style="margin-top:40px;padding:26px">
+    <div class="rwbar" id="rwBar"><span class="mono" id="rwState">AUDIT READY</span><span id="rwFinding" class="mono"></span></div>
+    <div class="rwrow" id="rwRow"></div>
+    <div class="rwlog mono" id="rwLog">Press the button to inject a problem into the record.</div>
+    <div class="cycbtns"><button class="btn pri" id="rwGo">Compliance finds a problem</button><button class="btn" id="rwReset">Reset</button></div>
+  </div>
+</section>
+
+<!-- PUBLISH -->
+<section id="s7" data-nav="Safe publish">
+  <div class="tag">08 · Getting it into the platform</div>
+  <h2 class="rv">Publishing happens <em>once,</em> so every guard sits in front of it.</h2>
+  <p class="lede rv">The certification platform has no update and no delete. Whatever is written stays written. So nothing goes in during the run. It goes in at the end, after the audit, and only if a person says yes.</p>
+  <div class="anat rv">
+    <div class="code2"><span class="d">// one call per item, sent only after the audit gate opens</span>
+<span class="k">create_hlr</span>({
+  item:      <span class="s">"GEAR-DEMO"</span>,
+  id:        <span class="s">"HLR-1"</span>,
+  text:      <span class="s">"Warn below the limit, gear not down"</span>,
+  traces_to: [<span class="s">"SR-1"</span>]
+})
+
+<span class="d">// response</span>
+{ <span class="g">ok</span>: true, <span class="g">id</span>: <span class="s">"item_0192"</span> }</div>
+    <div class="callouts">
+      <div class="co"><b><i>01</i>One call per item</b>Every requirement, design item, test and procedure is its own small call, so each one is easy to log and to check.</div>
+      <div class="co"><b><i>02</i>A ledger stops duplicates</b>Nothing can be deleted, so every call is recorded. A retry skips what already went in, and an unreadable response is marked unknown instead of being sent twice.</div>
+      <div class="co"><b><i>03</i>Then read it all back</b>The same read tools pull the records out and compare them with what was sent. A mismatch is reported, not hidden.</div>
+    </div>
+  </div>
+  <div class="rails" id="rails">
+    <div class="card rail"><div class="ic">☑</div><div class="n">GUARD 01</div><h3>Audit must be ready</h3><p>Publishing refuses if the compliance team has any open failure.</p></div>
+    <div class="card rail"><div class="ic">#</div><div class="n">GUARD 02</div><h3>Bound to what was audited</h3><p>A content fingerprint, not a timestamp. Change one word after the audit and publish stops.</p></div>
+    <div class="card rail"><div class="ic">⟳</div><div class="n">GUARD 03</div><h3>No stale records</h3><p>If an upstream agent reran, every record downstream of it is flagged until it reruns too.</p></div>
+    <div class="card rail"><div class="ic">✋</div><div class="n">GUARD 04</div><h3>A person says yes</h3><p>The plan lists every MCP call it will make. Nothing is sent until a human confirms.</p></div>
+    <div class="card rail"><div class="ic">◉</div><div class="n">GUARD 05</div><h3>Read it back</h3><p>After writing, the same records are read from the platform and compared with what was sent.</p></div>
+  </div>
+  <div class="pubbar rv"><button class="btn pri" id="pubRun">Walk the guards</button><span class="pubstat" id="pubStat">Plan only. Nothing is written in this walkthrough.</span></div>
+</section>
+
+<!-- OUT -->
+<section id="sout" data-nav="What comes out">
+  <div class="tag">00 · What comes out</div>
+  <h2 class="rv">A brief goes in. <em>An audit-ready package</em> comes out.</h2>
+  <p class="lede rv">Every item is traced to the one above it, every draft was approved by a person, and the record says who and which model made it.</p>
+  <div class="outgrid rv">
+    <div class="card oc"><b>01</b><h3>Requirements</h3><p>Customer, system, and high-level requirements, one per behavior in the brief.</p></div>
+    <div class="card oc"><b>02</b><h3>Design</h3><p>Low-level requirements and short module descriptions, each tied to a requirement.</p></div>
+    <div class="card oc"><b>03</b><h3>Source code</h3><p>C code that builds, with unit tests, committed to git.</p></div>
+    <div class="card oc"><b>04</b><h3>Verification</h3><p>Test cases, test procedures, and results from running them against the real code.</p></div>
+    <div class="card oc"><b>05</b><h3>Traceability matrix</h3><p>Requirement to design to code to test, in one table, rebuilt on every audit.</p></div>
+    <div class="card oc"><b>06</b><h3>Audit report</h3><p>The verdict, every finding, and whether the project is ready for a human audit.</p></div>
+    <div class="card oc"><b>07</b><h3>Provenance</h3><p>Who approved each item, which model drafted it, and when, so auto-approvals are visible.</p></div>
+    <div class="card oc"><b>08</b><h3>Publish plan</h3><p>The exact list of platform calls the package would make, shown before anything is sent.</p></div>
+  </div>
+  <div class="code2 rv" style="margin-top:22px">package/
+  requirements/    <span class="d">customer, system, high-level</span>
+  design/          <span class="d">low-level, module notes</span>
+  code/            <span class="d">src, unit tests (build and pass)</span>
+  verification/    <span class="d">test cases, procedures, results</span>
+  compliance/      <span class="d">findings, audit report, traceability matrix</span>
+  provenance.json  <span class="d">who approved what, which model, when</span>
+  publish_plan     <span class="d">every platform call, for a human yes</span></div>
+</section>
+
+<!-- ROLE -->
+<section id="s8" data-nav="My part">
+  <div class="tag">09 · My part in it</div>
+  <h2 class="rv">I came to this from <em>testing the platform</em> first.</h2>
+  <p class="lede rv">Working on a certification platform for DO-178C and DO-254 projects meant finding where it fails before designing anything that writes into it. That is why the safety guards look the way they do.</p>
+  <div class="tl rv">
+    <div class="card"><div class="big">40+</div><h3>Defects found and documented</h3><p>UI behavior, data integrity, and access control issues in the platform, several critical enough to go straight to engineering.</p></div>
+    <div class="card"><div class="big">43</div><h3>Point documentation review</h3><p>Reviewed the platform's own technical documentation against the same standards it supports, across traceability, source control, and test procedures.</p></div>
+    <div class="card"><div class="big">2</div><h3>Standards worked through</h3><p>DO-178C and DO-330 training covering assurance levels, requirements traceability, and tool qualification.</p></div>
+    <div class="card"><div class="big">1</div><h3>Agent framework designed and built</h3><p>The two-team workflow on this page, worked out with the engineering lead and built in Python with a regression suite that runs without calling a model.</p></div>
+  </div>
+</section>
+
+<!-- LEARNED -->
+<section id="s9" data-nav="What I learned">
+  <div class="tag">10 · What building it taught me</div>
+  <h2 class="rv">Six things I would tell <em>the next team.</em></h2>
+  <div class="learn rv">
+    <div class="card"><div class="q">01</div><div><h3>A model should not grade its own work</h3><p>The compliance team uses plain rules instead of a model. The same kind of mistake does not get checked by the same kind of mind.</p></div></div>
+    <div class="card"><div class="q">02</div><div><h3>Passing the audit is not the same as being good</h3><p>The audit says the record is complete and traceable. Whether the requirements are right is a person's call, which is why the gate exists.</p></div></div>
+    <div class="card"><div class="q">03</div><div><h3>Pass pointers, not payloads</h3><p>Agents hand off a note that says where the work is. The next agent reads the record, so there is one source of truth.</p></div></div>
+    <div class="card"><div class="q">04</div><div><h3>Design around what the platform cannot do</h3><p>No update, no delete, and no document content writes. That one fact decided when and how publishing happens.</p></div></div>
+    <div class="card"><div class="q">05</div><div><h3>Test the checkers too</h3><p>I broke the record on purpose, missing tests, orphaned links, stale downstream items, and confirmed the audit caught each one.</p></div></div>
+    <div class="card"><div class="q">06</div><div><h3>Small models need small jobs</h3><p>Asking a small local model for one narrow addition and merging it in code beat asking it to rewrite everything.</p></div></div>
+  </div>
+  <div class="honest rv">
+    <h3>What is not proven yet</h3>
+    <ul>
+      <li>The full flow has run on sample briefs with a cloud model. The local-model path for restricted work still needs its own run.</li>
+      <li>The agents' output is only as good as the requirements a person approves.</li>
+      <li>Records written to the platform cannot be edited later, so rework has to finish before publishing.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- GLOSSARY -->
+<section id="sgloss" data-nav="Glossary">
+  <div class="tag">00 · Plain-language glossary</div>
+  <h2 class="rv">The words on this page, <em>in plain English.</em></h2>
+  <div class="gl rv">
+    <div class="card"><h3>DO-178C</h3><p>The standard that governs software in airborne systems. It asks for proof at every step: what the software must do, how it is built, and how it was tested.</p></div>
+    <div class="card"><h3>High-level requirement</h3><p>A statement of what the system must do, written so it can be tested. One per behavior in the customer brief.</p></div>
+    <div class="card"><h3>Low-level requirement</h3><p>A finer-grained statement of how a piece of the software will meet a high-level one. The code is written against these.</p></div>
+    <div class="card"><h3>Traceability</h3><p>An unbroken chain from a requirement, to its design, to its code, to the test that proves it. A gap anywhere is a finding.</p></div>
+    <div class="card"><h3>MCP</h3><p>Model Context Protocol, a standard way for an AI agent to use another system's tools. Here it is how agents read from and write to the platform.</p></div>
+    <div class="card"><h3>Orchestrator</h3><p>The plain-code controller that releases each agent when the one before it finishes. It uses no AI, so it behaves the same way every time.</p></div>
+    <div class="card"><h3>Firewall</h3><p>The rule that development and compliance never message each other. Only the shared record connects them, so QA stays independent.</p></div>
+    <div class="card"><h3>Mutation check</h3><p>Deliberately breaking a copy of the code to see whether the tests notice. A test that passes both ways is not proving anything.</p></div>
+    <div class="card"><h3>Provenance</h3><p>The record of who approved each item, which model drafted it, and when. It makes any auto-approval visible to the auditor.</p></div>
+  </div>
+</section>
+
+<!-- ROAD -->
+<section id="sroad" data-nav="Where it stands">
+  <div class="tag">00 · Where it stands</div>
+  <h2 class="rv">What is done, and <em>what is next.</em></h2>
+  <div class="road rv">
+    <div class="card"><h3 class="rh d">Done</h3><ul>
+      <li>Seven development agents and three compliance agents, run by a plain-code Orchestrator.</li>
+      <li>Human gate at each agent, with feedback that reaches the redraft.</li>
+      <li>Firewall between the teams, enforced in code and again by the operating system, so the audit cannot change the record it is checking.</li>
+      <li>Audit gate, content fingerprint, stale-record check, and guarded publish with read-back.</li>
+      <li>A regression suite that runs without calling a model.</li>
+      <li>Local-model safeguards: a readiness check that stops a run at once instead of quietly degrading, smaller jobs per call, per-agent model choice under the same restricted-work rules, a repair step that shows a model its own rejected code, a fixed memory window so long prompts are not silently cut, and a watchdog that only stops a run that has gone quiet.</li>
+      <li>A first small slice written to a sandbox project and read back clean.</li>
+    </ul></div>
+    <div class="card"><h3 class="rh w">Proven so far</h3><ul>
+      <li>Full runs on invented sample briefs, with a cloud model.</li>
+      <li>Generated code builds and its tests pass.</li>
+      <li>The audit catches deliberately broken records.</li>
+    </ul><p style="color:var(--dim);font-size:13px;margin-top:10px">Passing the audit means complete and traceable, not that the requirements are right. That judgment stays with the person at the gate.</p></div>
+    <div class="card"><h3 class="rh n">Next</h3><ul>
+      <li>A full run on a local model for restricted work, using the new safeguards (built and tested with stand-in models, not yet proven on a real local run).</li>
+      <li>A full publish to a sandbox project, then read back.</li>
+      <li>Decide the document agent and the importer roles.</li>
+      <li>A trial on a real, non-sensitive project with an engineer reviewing every gate.</li>
+    </ul></div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  Illustrative walkthrough. The example requirements are invented and no customer data appears anywhere on this page.<br>
+  Tool and platform names are generalized. Counts in the mutation demo are illustrative.
+</footer>
+
+<script>
+/* ---------- helpers ---------- */
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+
+/* nav + reveal */
+const secs=$$('main section');
+const nav=$('#nav');
+secs.forEach((s,i)=>{const a=document.createElement('a');a.href='#'+s.id;a.innerHTML='<span>'+s.dataset.nav+'</span>';nav.appendChild(a)});
+const navA=[...nav.children];
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in')}),{threshold:.12});
+$$('.rv').forEach(e=>io.observe(e));
+const io2=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){navA.forEach(a=>a.classList.remove('on'));navA[secs.indexOf(e.target)].classList.add('on')}}),{threshold:.45});
+secs.forEach(s=>io2.observe(s));
+
+/* counters */
+$$('.stat b').forEach(b=>{const t=+b.dataset.n;let n=0;const id=setInterval(()=>{n+=Math.max(1,Math.ceil(t/30));if(n>=t){n=t;clearInterval(id)}b.textContent=n},40)});
+
+/* ---------- ORG DIAGRAM ---------- */
+const AG={
+ intake:{n:'Intake',t:'Checks that the customer brief is complete, asks a person clarifying questions, and records the first customer requirements.',r:'The customer brief',w:'The first record, and a note that the project started'},
+ planner:{n:'Planner',t:'Turns the brief into system requirements, and picks the model route for the run, cloud or local.',r:'Intake record',w:'System requirements and the item definition'},
+ req:{n:'REQ agent',t:'Writes high-level requirements, one per behavior in the brief, then checks every customer item is covered.',r:'Planner record',w:'High-level requirements'},
+ design:{n:'Design agent',t:'Breaks each high-level requirement into low-level requirements and short module descriptions.',r:'REQ record',w:'Low-level requirements, module notes'},
+ coding:{n:'Coding + unit test agent',t:'Writes source for each low-level requirement with unit tests, commits to git, and rejects two modules that define the same global.',r:'Design record',w:'Source code, unit tests, a git commit'},
+ testproc:{n:'Test procedure agent',t:'Writes test cases that trace back to each requirement. Runs alongside coding because both only need the design.',r:'Design record',w:'Test cases'},
+ testcode:{n:'Test code + unit test agent',t:'Writes runnable test code, builds it against the real source, and runs it. Build errors go back as feedback.',r:'Test cases and source',w:'Test procedures and results'},
+ checker:{n:'Checker agent',t:'Follows every requirement through design and code and flags any link that is missing. Uses plain rules, no model.',r:'The development record, read only',w:'Findings, in its own area'},
+ adequacy:{n:'Test adequacy agent',t:'Confirms each requirement has a test, then breaks a copy of the code to see whether the tests notice.',r:'The development record, read only',w:'Findings and mutation results'},
+ qa:{n:'QA agent',t:'Audits the whole record, checks who approved each item, and decides whether the project is ready for audit.',r:'The development record, read only',w:'The audit report and traceability matrix'}
+};
+AG.mcp={n:'MCP layer',t:'MCP is the standard way an AI agent talks to another system. The platform offers a short list of tools to create items and to read them. It has no update and no delete, so everything the agents write is staged first and sent once, at the end.',r:'Read tools: list and fetch items so agents and the audit see the same record',w:'Create tools: one call per item, sent only after the audit and a human yes'};
+const TOOLS={intake:'create_customer_req',planner:'create_system_req',req:'create_hlr',design:'create_llr',coding:'create_source_ref',testproc:'create_test_case',testcode:'create_test_procedure'};
+let streaming=false,platN=0;
+function setGate(st){const g=$('#gate');g.classList.remove('open','locked','off');g.classList.add(st==='off'?'off':(st?'open':'locked'));
+  $('#gt1').textContent=st==='off'?'AUDIT':'AUDIT';$('#gt2').textContent=st==='off'?'LATER':'GATE'}
+function idleMode(){return streaming?'DIRECT · each approved item is sent right away':'STAGING · calls are planned, nothing is sent'}
+function setNote(){$('#modeNote').textContent=streaming?'As drawn on the whiteboard: each approved item goes straight through MCP to the platform. Easy to follow, but the platform has no update or delete, so a problem found later cannot be fixed.':'Safe default: nothing is sent until the audit passes and a person says yes. Rework stays possible because nothing is permanent yet.';
+  $('#modeBtn').textContent=streaming?'Mode: send each write right away':'Mode: stage, publish at end'}
+function mcpHot(on){$('#mcpband').classList.toggle('hot',on)}
+$('#mcpband').addEventListener('click',()=>{
+  $$('#orgsvg .node').forEach(x=>x.classList.remove('sel'));
+  $('#dName').textContent=AG.mcp.n;$('#dText').textContent=AG.mcp.t;$('#dText').classList.remove('mut');$('#dReads').textContent=AG.mcp.r;$('#dWrites').textContent=AG.mcp.w;
+});
+let sel=null;
+$$('#orgsvg .node').forEach(g=>g.addEventListener('click',()=>{
+  const k=g.dataset.k;$$('#orgsvg .node').forEach(x=>x.classList.remove('sel'));g.classList.add('sel');
+  $('#dName').textContent=AG[k].n;$('#dText').textContent=AG[k].t;$('#dText').classList.remove('mut');$('#dReads').textContent=AG[k].r;$('#dWrites').textContent=AG[k].w;
+}));
+const ORDER=[['intake'],['planner'],['req'],['design'],['coding','testproc'],['testcode'],['checker','adequacy','qa']];
+const TOTAL=10;let running=false,runToken=0,recCount=0;
+function setState(k,s,label){const g=$('#n_'+k);g.classList.remove('work','done');if(s)g.classList.add(s);g.querySelector('.st').textContent=label}
+function log(h){const l=$('#orgLog');const d=document.createElement('div');d.innerHTML=h;l.appendChild(d);l.scrollTop=l.scrollHeight}
+function packet(pathId,cls,dur=900){return new Promise(res=>{
+  const p=document.getElementById(pathId);const len=p.getTotalLength();
+  const c=document.createElementNS('http://www.w3.org/2000/svg','circle');c.setAttribute('r',6);c.setAttribute('class','pkt '+(cls||''));$('#pkts').appendChild(c);
+  const t0=performance.now();(function st(t){const u=Math.min(1,(t-t0)/dur);const e=u<.5?2*u*u:1-Math.pow(-2*u+2,2)/2;const pt=p.getPointAtLength(len*e);c.setAttribute('cx',pt.x);c.setAttribute('cy',pt.y);if(u<1)requestAnimationFrame(st);else{c.remove();res()}})(t0)})}
+async function runAgent(k,tok,compliance){
+  if(tok!==runToken)return;
+  setState(k,'work',compliance?'checking':'working');
+  log(`<b>Orchestrator</b> releases <b>${k}</b>`);
+  await sleep(compliance?1100:900); if(tok!==runToken)return;
+  if(compliance){await packet('r_'+k,'g',900)} else {log(`<s>human gate</s> ${k} approved`);await sleep(350);if(tok!==runToken)return;await packet('g_'+k,'',900)}
+  if(tok!==runToken)return;
+  setState(k,'done',compliance?'checked':'approved');
+  if(!compliance){recCount++;$('#reccount').textContent=recCount+' items';log(`<i>written</i> ${k} record, orchestrator notified`);
+    mcpHot(true);await packet('m_down','o',500);if(tok!==runToken)return;
+    if(streaming){log(`<b>MCP</b> ${TOOLS[k]} <i>sent</i> to the platform right away`);await packet('m_pub','o',550);if(tok!==runToken)return;platN++;$('#platcount').textContent=platN+' records'}
+    else log(`<b>MCP</b> ${TOOLS[k]} <s>staged</s>, not sent`);
+    await sleep(150);mcpHot(false)}
+  else{mcpHot(true);log(`<b>MCP</b> read_items for ${k}`);await sleep(250);mcpHot(false);
+    log(`<i>read</i> ${k} finished its checks, writing findings to its own area`);await packet('f_'+k,'v',700);if(tok!==runToken)return;
+    log(`<s>findings</s> ${k} findings stored, development items untouched`)}
+  done++;$('#prog').style.width=(done/TOTAL*100)+'%';
+}
+let done=0;
+async function playRun(){
+  if(running)return;clearTimeout(autoTimer);window.__runs=(window.__runs||0)+1;resetRun(true);running=true;$('#playBtn').disabled=true;const tok=++runToken;
+  $('#orgLog').innerHTML='';
+  for(const grp of ORDER){
+    if(tok!==runToken)return;
+    const isC=grp[0]==='checker';
+    if(isC){log('<s>development finished</s> compliance team starts, read only');await sleep(700)}
+    if(grp.length>1&&!isC)log('<b>Orchestrator</b> releases two agents at once');
+    await Promise.all(grp.map(k=>runAgent(k,tok,isC)));
+  }
+  if(tok!==runToken)return;
+  $('#verdict').textContent='AUDIT READY';$('#verdict').classList.add('ok');if(!streaming){setGate(true);log('<i>audit gate</i> opens: no open findings, fingerprint recorded')}else log('<s>note</s> the audit ran after the writes, so it can report problems but cannot undo what was already sent');log('<i>audit ready</i> every requirement traces to code and tests');
+  running=false;$('#playBtn').disabled=false;$('#playBtn').textContent='▶ Play again';
+  if(!streaming)log('<s>next</s> publish step: nothing is sent until a person says yes');await sleep(1000);if(tok===runToken)publishMcp(streaming);
+}
+let publishing=false;
+async function publishMcp(readOnly){
+  if(readOnly!==true)readOnly=false;
+  if(running||publishing)return;publishing=true;const tok=runToken;
+  $('#pubMcp').disabled=true;$('#playBtn').disabled=true;if(!readOnly)$('#platcount').textContent='0 records';
+  try{
+    const ks=Object.keys(TOOLS);let n=0;
+    if(!readOnly){
+    $('#mcpmode').textContent='WAITING FOR A HUMAN YES · plan is 7 calls';
+    log('<s>human gate</s> publish plan shown: 7 MCP calls. A person says yes');await sleep(1700);if(tok!==runToken)return;
+    $('#mcpmode').textContent='LIVE WRITE · approved by a person, sent once';
+    for(const k of ks){mcpHot(true);log(`<b>MCP</b> ${TOOLS[k]} <i>sent</i> to the platform`);await packet('m_pub','o',650);if(tok!==runToken)return;n++;$('#platcount').textContent=n+' records';await sleep(150)}
+    }
+    mcpHot(false);await sleep(500);if(tok!==runToken)return;
+    log('<b>MCP</b> read_items, reading the platform back');$('#mcpmode').textContent='READING BACK · comparing with what was sent';
+    await packet('r_back','g',800);if(tok!==runToken)return;await packet('r_back','g',800);if(tok!==runToken)return;
+    log('<i>read back</i> all 7 records match what was sent');
+    $('#mcpmode').textContent='DONE · read back and matched';
+    $('#playBtn').disabled=false;$('#pubMcp').disabled=streaming;$('#pubMcp').textContent='Publish again';scheduleAuto(AUTO_MS);
+  }finally{publishing=false}
+}
+$('#pubMcp').onclick=publishMcp;
+function resetRun(quiet){
+  runToken++;running=false;done=0;recCount=0;$('#prog').style.width='0';$('#reccount').textContent='0 items';
+  $('#verdict').textContent='Audit not run yet';$('#verdict').classList.remove('ok');
+  ORDER.flat().forEach(k=>setState(k,null,'waiting'));$('#pkts').innerHTML='';
+  $('#playBtn').disabled=false;$('#playBtn').textContent='▶ Play a run';
+  $('#pubMcp').disabled=true;$('#pubMcp').textContent='Publish through MCP';$('#platcount').textContent='0 records';platN=0;$('#mcpmode').textContent=idleMode();mcpHot(false);setGate(streaming?'off':false);
+  if(!quiet)$('#orgLog').innerHTML='<div>Ready. Press play to start a run.</div>';
+}
+$('#playBtn').onclick=playRun;$('#resetBtn').onclick=()=>{resetRun(false);scheduleAuto(AUTO_MS)};
+$('#modeBtn').onclick=()=>{if(running||publishing)return;streaming=!streaming;setNote();resetRun(false);scheduleAuto(AUTO_MS)};
+setNote();$('#mcpmode').textContent=idleMode();
+
+/* ---------- AUTO REPLAY ---------- */
+const AUTO_MS=window.AUTO_MS||120000;
+let autoOn=!(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches),autoTimer=null,nextAt=0,inView=false,autoStarted=false;
+function scheduleAuto(ms){clearTimeout(autoTimer);if(!autoOn)return;nextAt=Date.now()+ms;autoTimer=setTimeout(autoFire,ms)}
+function autoFire(){if(!autoOn)return;if(running||publishing||document.hidden||!inView){scheduleAuto(4000);return}playRun()}
+function autoUi(){$('#autoBtn').textContent='Auto-replay: '+(autoOn?'on':'off');
+  const l=$('#autoLbl');if(!autoOn){l.textContent='';return}
+  if(running||publishing){l.textContent='running';return}
+  const sec=Math.max(0,Math.round((nextAt-Date.now())/1000));l.textContent=nextAt?('next run in '+Math.floor(sec/60)+':'+String(sec%60).padStart(2,'0')):''}
+setInterval(autoUi,1000);autoUi();
+$('#autoBtn').onclick=()=>{autoOn=!autoOn;clearTimeout(autoTimer);if(autoOn)scheduleAuto(3000);else nextAt=0;autoUi()};
+new IntersectionObserver(es=>es.forEach(e=>{inView=e.isIntersecting&&e.intersectionRatio>=0.5;
+  if(inView&&autoOn&&!autoStarted&&!running&&!publishing){autoStarted=true;scheduleAuto(2500)}}),{threshold:[0,.25,.5,.75]}).observe(document.getElementById('orgsvg'));
+
+/* ---------- AGENT CYCLE ---------- */
+const POS=[[85,40],[280,40],[475,40],[475,158],[475,300],[280,310],[85,310]];
+let ci=0;
+function cyc(i){ci=i;const d=$('#cdot');d.setAttribute('cx',POS[i][0]);d.setAttribute('cy',POS[i][1]);
+  $$('#cycsvg .cn').forEach((g,j)=>{g.classList.toggle('on',j===i);g.classList.toggle('past',j<i)});
+  $$('#cycSteps li').forEach((l,j)=>l.classList.toggle('on',j===i));
+  const gate=i===3;$('#cycNext').style.display=gate?'none':'';$('#cycApprove').style.display=gate?'':'none';$('#cycChange').style.display=gate?'':'none';
+  if(i===6)$('#cycNext').textContent='Restart ↺';else $('#cycNext').textContent='Next step →';}
+$('#cycNext').onclick=()=>{ci>=6?cyc(0):cyc(ci+1)};
+$('#cycApprove').onclick=()=>cyc(4);
+$('#cycChange').onclick=async()=>{cyc(1);await sleep(900);cyc(2);await sleep(900);cyc(3)};
+$('#cycReset').onclick=()=>cyc(0);
+cyc(0);
+
+/* ---------- FIREWALL ---------- */
+const FW=[
+ ['no','Dev agent → compliance agent','No direct messages across the firewall. Request refused.'],
+ ['no','Compliance agent → dev agent','No direct messages in either direction. Request refused.'],
+ ['no','Dev agent reads compliance findings','Development cannot see compliance output. Refused.'],
+ ['ok','Dev agent writes to the record','Allowed, after a human gate. This is the only way work crosses.'],
+ ['ok','Compliance agent reads the record','Allowed. Read only, so it cannot change what it is checking.'],
+ ['ok','Findings to the dev agent that owns the item','Allowed, but only through the launcher: a person or the run script reads the findings and sends each one to the right agent.']
+];
+$$('[data-fw]').forEach(b=>b.onclick=()=>{
+  const f=FW[+b.dataset.fw];const box=$('#fwlog');if(box.firstElementChild&&!box.firstElementChild.classList.contains('r2'))box.innerHTML='';
+  const r=document.createElement('div');r.className='row r2';r.innerHTML=`<span class="pill ${f[0]}">${f[0]==='ok'?'ALLOWED':'REFUSED'}</span><span><b>${f[1]}</b><br><span style="color:var(--mut);font-size:13px">${f[2]}</span></span>`;
+  box.prepend(r);});
+
+/* ---------- COMPLIANCE VIEW (live) ---------- */
+(function(){
+  const nodes=$$('.cvn'),gate=$('#cvGate'),gs=$('#cvGs'),gw=$('#cvGw'),fp=$('#cvFp'),bRun=$('#cvRun'),bEdit=$('#cvEdit'),bReset=$('#cvReset');
+  if(!nodes.length)return;
+  const quick=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const END=[['ok','clean'],['warn','2 tests missed a planted defect'],['ok','ready']];
+  const FP0='c7e2a9',FP1='c7e2f4';
+  let audited=false,changed=false,busy=false,run=0;
+  function setNode(n,s,txt){n.className='cvn '+s;n.querySelector('.st').textContent=txt}
+  function setGate(s,title,why,line){gate.className='cvgate '+s;gs.textContent=title;gw.textContent=why;fp.textContent=line||''}
+  function sync(){bRun.disabled=busy||(audited&&!changed);bEdit.disabled=busy||!audited||changed;bRun.textContent=changed?'Rerun the audit':'Run the audit'}
+  function reset(){run++;audited=changed=busy=false;nodes.forEach(n=>setNode(n,'wait','waiting'));setGate('wait','WAITING','The audit has not run yet.','');sync()}
+  async function audit(){
+    if(busy)return;const my=++run;busy=true;changed=false;sync();
+    nodes.forEach(n=>setNode(n,'wait','waiting'));setGate('wait','WAITING','The audit is running.','');
+    for(let k=0;k<nodes.length;k++){
+      setNode(nodes[k],'run','working');await sleep(quick?150:850);if(my!==run)return;
+      setNode(nodes[k],END[k][0],END[k][1]);
+    }
+    audited=true;busy=false;
+    setGate('open','OPEN','The audit is clean and matches the current record. Publishing still needs a person to say yes.','audited record '+FP0+'  |  record now '+FP0);
+    sync();
+  }
+  bRun.onclick=audit;
+  bEdit.onclick=()=>{
+    if(!audited||changed)return;changed=true;
+    setGate('blocked','BLOCKED','The record changed after the audit. Rerun the audit before anything can be published.','audited record '+FP0+'  |  record now '+FP1+'  (different)');
+    sync();
+  };
+  bReset.onclick=reset;
+  reset();
+})();
+
+/* ---------- TRACE MATRIX ---------- */
+const HL=[
+ ['HLR-1','Warn when altitude is below the limit and gear is not down'],
+ ['HLR-2','Clear the warning once the gear is down and locked'],
+ ['HLR-3','Show the gear position as up, down, or in transit'],
+ ['HLR-4','Show a fault if the sensors disagree for too long']
+];
+function drawMx(mode){
+  const tb=$('#mxTable tbody');tb.innerHTML='';
+  HL.forEach((h,i)=>{
+    const tr=document.createElement('tr');
+    const cells=[['LLR-'+(i+1),''],['module_'+(i+1)+'.c',''],['TC-'+(i+1),'test'],['TP-'+(i+1),'test']];
+    let html=`<td><b>${h[0]}</b><small>${h[1]}</small></td>`;
+    cells.forEach((c,j)=>{
+      let cls='',txt=c[0];
+      if(mode==='del'&&c[1]==='test'){cls='miss';txt='missing'}
+      if(mode==='stale'&&i===1&&j>=0){cls='stale';txt=j===0?'stale':'stale'}
+      html+=`<td class="${cls}"><span class="x"><i></i>${txt}</span></td>`;
+    });
+    tr.innerHTML=html;tb.appendChild(tr);
+  });
+  const b=$('#mxBadge'),f=$('#mxFinds');
+  if(mode==='del'){b.textContent='NOT AUDIT READY';b.classList.add('bad');f.innerHTML=HL.map(h=>`<div>${h[0]} has no test case</div>`).join('')+'<div class="w">Procedures reference tests that do not exist</div>';}
+  else if(mode==='stale'){b.textContent='NOT AUDIT READY';b.classList.add('bad');f.innerHTML='<div>HLR-2 changed after the audit, content fingerprint no longer matches</div><div>LLR-2, module_2.c, TC-2, TP-2 are stale until the agents above them rerun</div><div class="w">Publish refused until Compliance runs again</div>';}
+  else{b.textContent='AUDIT READY';b.classList.remove('bad');f.innerHTML='<span style="color:var(--dim)">No findings. Every requirement traces to code and to a test that exists.</span>';}
+}
+$('#mxDel').onclick=()=>drawMx('del');$('#mxStale').onclick=()=>drawMx('stale');$('#mxReset').onclick=()=>drawMx('ok');drawMx('ok');
+
+/* ---------- MUTATION ---------- */
+const mg=$('#mgrid');for(let i=0;i<24;i++){const e=document.createElement('i');mg.appendChild(e)}
+const cells=[...mg.children];let mround=0;const SURV1=[3,9,14,20];
+async function mrun(survivors){
+  $('#mRun').disabled=true;$('#mFix').disabled=true;mround++;$('#mRound').textContent=mround;
+  cells.forEach(c=>c.className='');$('#mCaught').textContent=0;$('#mSurv').textContent=0;let c=0,s=0;
+  $('#mNote').textContent='Making a deliberate defect, running the tests, recording whether they notice...';
+  for(let i=0;i<24;i++){await sleep(110);if(survivors.includes(i)){cells[i].className='s';s++}else{cells[i].className='c';c++}$('#mCaught').textContent=c;$('#mSurv').textContent=s;
+    if(i===12)$('#op').textContent='<=';}
+  $('#op').textContent='<';
+  if(s){$('#mNote').textContent=s+' defects survived. Each goes back to the test agent with the exact source line, so it can write a test that fails on it.';$('#mFix').disabled=false}
+  else{$('#mNote').textContent='Every defect was caught. The tests are doing real work, not just passing.';}
+  $('#mRun').disabled=false;
+}
+$('#mRun').onclick=()=>{mround=0;mrun(SURV1)};
+$('#mFix').onclick=async()=>{$('#mNote').textContent='Test agent adds boundary tests for the survivors, a person approves, and the check runs again.';await sleep(1400);mrun([])};
+
+/* ---------- PUBLISH ---------- */
+$('#pubRun').onclick=async()=>{
+  const rs=$$('#rails .rail');const st=$('#pubStat');$('#pubRun').disabled=true;rs.forEach(r=>r.classList.remove('lit'));
+  const msg=['Audit ready: yes','Fingerprint matches the audited content','No stale records','Plan shown. Waiting for a human yes...','Read back: all records match'];
+  for(let i=0;i<5;i++){rs[i].classList.add('lit');st.textContent=msg[i];await sleep(i===3?1400:900)}
+  st.textContent='All five guards passed. In this walkthrough nothing is written.';$('#pubRun').disabled=false;
+};
+
+/* ---------- 3D STACK ---------- */
+const LAYERS=[
+ {k:'platform',n:'Platform',c:'#ffd166',t:'The certification platform, the system of record. It is written once, after the audit and a human yes, and then read back to confirm.',inner:'<div class="pg">'+'<i></i>'.repeat(24)+'</div>'},
+ {k:'mcp',n:'MCP connector',c:'#ffb454',t:'The standard connector between the agents and the platform. A short list of create and read tools, with no update and no delete.',inner:'<div class="rl"><b></b></div><div class="rl"><b></b></div><div class="rl"><b></b></div>'},
+ {k:'record',n:'Shared record',c:'#a78bfa',t:'The one record everyone works from. Development writes it, compliance reads it and keeps its findings in its own area.',inner:'<div class="rw"></div><div class="rw"></div><div class="rw"></div><div class="rw"></div><div class="rw"></div>'},
+ {k:'agents',n:'Agent teams',c:'#5ad1ff',t:'Seven development agents and three compliance agents, split by a firewall. A plain-code Orchestrator releases each one in turn.',inner:'<div class="ag"><div class="g1">'+'<i></i>'.repeat(7)+'</div><div class="fw"></div><div class="g2">'+'<i></i>'.repeat(3)+'</div></div>'},
+ {k:'humans',n:'Human gate',c:'#4ade80',t:'A person approves every draft, can ask for changes, and says yes to the publish. Nothing permanent happens without one.',inner:'<div class="hd"><i>✋</i><i>✓</i><i>✋</i></div>'}
+];
+function buildStack(el,labels,inner){
+  el.innerHTML=LAYERS.map((L,i)=>`<div class="ly" data-k="${L.k}" style="--i:${i};--c:${L.c}"><span class="lb">${L.n.toUpperCase()}</span>${inner?`<div class="in">${L.inner}</div>`:''}</div>`).join('');
+}
+buildStack($('#heroSc'),true,false);
+buildStack($('#mainSc'),true,true);
+const mainSc=$('#mainSc');let drag=null,rz=-35,rx=58,sway=true,t0s=performance.now();
+function selLayer(k){
+  $$('#mainSc .ly').forEach(l=>l.classList.toggle('act',l.dataset.k===k));
+  $$('#layerlist .lli').forEach(l=>l.classList.toggle('act',l.dataset.k===k));
+  const L=LAYERS.find(x=>x.k===k);if(!L)return;$('#ldName').textContent=L.n;$('#ldText').textContent=L.t;
+}
+$('#layerlist').innerHTML=LAYERS.slice().reverse().map(L=>`<div class="lli" data-k="${L.k}" style="--c:${L.c}"><i></i>${L.n}</div>`).join('');
+$$('#layerlist .lli').forEach(e=>e.onclick=()=>selLayer(e.dataset.k));
+let moved=0;
+$$('#mainSc .ly').forEach(e=>e.addEventListener('click',()=>{if(moved<5)selLayer(e.dataset.k)}));
+const sv=$('#stackview');
+sv.addEventListener('pointerdown',e=>{drag={x:e.clientX,y:e.clientY,rz,rx};moved=0;sway=false;sv.setPointerCapture(e.pointerId)});
+sv.addEventListener('pointermove',e=>{if(!drag)return;const dx=e.clientX-drag.x,dy=e.clientY-drag.y;moved=Math.max(moved,Math.abs(dx)+Math.abs(dy));rz=drag.rz+dx*.45;rx=Math.max(20,Math.min(80,drag.rx-dy*.3));apply()});
+sv.addEventListener('pointerup',()=>{drag=null});
+function apply(){mainSc.style.setProperty('--rz',rz+'deg');mainSc.style.setProperty('--rx',rx+'deg')}
+$('#exBtn').onclick=()=>{const co=mainSc.classList.toggle('co');mainSc.classList.toggle('ex',!co);$('#exBtn').textContent=co?'Explode':'Collapse'};
+$('#spinBtn').onclick=()=>{rz=-35;rx=58;sway=true;apply()};
+const reduceM=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+(function swayLoop(){if(sway&&!reduceM&&!document.hidden){const t=(performance.now()-t0s)/1000;rz=-35+Math.sin(t*.5)*14;rx=58+Math.sin(t*.35)*4;apply()}requestAnimationFrame(swayLoop)})();
+selLayer('agents');
+
+/* ---------- 3D CARD TILT ---------- */
+if(!reduceM&&window.matchMedia&&matchMedia('(hover:hover) and (pointer:fine)').matches){
+  $$('.tl .card,.learn .card,.rail,.stat,.role,.callouts .co,.oc,.mdl,.gl .card').forEach(el=>{
+    el.addEventListener('pointermove',e=>{const r=el.getBoundingClientRect();const px=(e.clientX-r.left)/r.width-.5,py=(e.clientY-r.top)/r.height-.5;
+      el.style.transition='transform .12s ease-out';el.style.transform=`perspective(800px) rotateX(${(-py*9).toFixed(2)}deg) rotateY(${(px*11).toFixed(2)}deg) translateZ(8px)`});
+    el.addEventListener('pointerleave',()=>{el.style.transition='transform .5s ease';el.style.transform=''});
+  });
+}
+
+/* ---------- ADDITIONS JS ---------- */
+// auto numbering
+$$('main section .tag').forEach((t,i)=>{t.textContent=String(i+1).padStart(2,'0')+' · '+t.textContent.replace(/^\d+\s·\s/,'')});
+// scroll progress
+(function(){const b=$('#topbar');function f(){const h=document.documentElement;const m=h.scrollHeight-h.clientHeight;b.style.width=(m>0?h.scrollTop/m*100:0)+'%'}addEventListener('scroll',f,{passive:true});f()})();
+// model routing
+(function(){
+  let proj='open',pick='cloud';
+  const notes={open:'You choose. Cloud is stronger and faster. Local keeps everything on the machine. The planner records the choice once for the whole run.',
+    restricted:'Cloud is refused in code, not by policy. Everything runs on a local model, and because small models do better with narrow jobs, the agents ask them for small additions instead of rewrites.'};
+  function draw(){
+    if(proj==='restricted')pick='local';
+    $('#routeNote').textContent=notes[proj];
+    $$('#projSeg button').forEach(b=>b.classList.toggle('on',b.dataset.p===proj));
+    const c=$('#mdlCloud'),l=$('#mdlLocal');
+    c.classList.toggle('lock',proj==='restricted');c.classList.toggle('sel',proj!=='restricted'&&pick==='cloud');
+    l.classList.toggle('sel',pick==='local');
+    $('#stCloud').textContent=proj==='restricted'?'REFUSED · restricted project':(pick==='cloud'?'SELECTED':'');
+    $('#stLocal').textContent=pick==='local'?(proj==='restricted'?'REQUIRED':'SELECTED'):'';
+    $('#routeFlow').innerHTML='Planner &rarr; <b>Model router</b> &rarr; <b>'+(pick==='cloud'?'cloud':'local')+' model</b> &rarr; every agent in the run';
+  }
+  $$('#projSeg button').forEach(b=>b.onclick=()=>{proj=b.dataset.p;if(proj==='open'&&pick==='local')pick='cloud';draw()});
+  $('#mdlCloud').onclick=()=>{if(proj==='open'){pick='cloud';draw()}};
+  $('#mdlLocal').onclick=()=>{pick='local';draw()};
+  draw();
+})();
+// rework loop
+(function(){
+  const CH=[['intake','intake'],['planner','planner'],['req','req'],['design','design'],['coding','coding + ut'],['testproc','test proc.'],['testcode','test code']];
+  const row=$('#rwRow');
+  row.innerHTML=CH.map((c,i)=>(i?'<span class="rwarrow">&rarr;</span>':'')+`<div class="pc" id="pc_${c[0]}">${c[1]}<small>approved</small></div>`).join('');
+  const set=(k,cls,txt)=>{const e=$('#pc_'+k);e.className='pc '+cls;e.querySelector('small').textContent=txt};
+  const lg=h=>{const l=$('#rwLog');l.innerHTML+=(l.dataset.f?'<br>':'')+h;l.dataset.f=1};
+  let tok=0,busy=false;
+  function reset(){tok++;busy=false;CH.forEach(c=>set(c[0],'','approved'));$('#rwBar').className='rwbar';$('#rwState').textContent='AUDIT READY';$('#rwFinding').textContent='';
+    const l=$('#rwLog');l.innerHTML='Press the button to inject a problem into the record.';delete l.dataset.f;$('#rwGo').disabled=false}
+  async function go(){
+    if(busy)return;busy=true;$('#rwGo').disabled=true;const t=++tok;const w=ms=>new Promise(r=>setTimeout(r,ms));
+    const l=$('#rwLog');l.innerHTML='';delete l.dataset.f;
+    $('#rwBar').className='rwbar bad';$('#rwState').textContent='NOT AUDIT READY';$('#rwFinding').textContent='FAIL  LLR-3 repeats the text of HLR-2';
+    lg('<b>compliance</b> <u>FAIL</u> LLR-3 repeats the text of HLR-2');set('design','bad','owns LLR-3');await w(1300);if(t!==tok)return;
+    lg('<b>launcher</b> reads the finding and looks at the item id: LLR belongs to <b>design</b>');await w(1500);if(t!==tok)return;
+    lg('<b>launcher</b> reopens design with the finding attached as feedback');set('design','run','redrafting');
+    ['coding','testproc','testcode'].forEach(k=>set(k,'stale','stale'));await w(1200);if(t!==tok)return;
+    lg('<s>downstream</s> coding, test proc., and test code are marked stale until design is done');await w(1400);if(t!==tok)return;
+    lg('<s>human gate</s> a person approves the new design draft');set('design','','approved');await w(1300);if(t!==tok)return;
+    for(const k of ['coding','testproc','testcode']){set(k,'run','rerunning');await w(900);if(t!==tok)return;set(k,'','approved')}
+    lg('<b>compliance</b> reruns on the new record');await w(1200);if(t!==tok)return;
+    $('#rwBar').className='rwbar';$('#rwState').textContent='AUDIT READY';$('#rwFinding').textContent='round 2 · 0 findings';
+    lg('<i>audit ready</i> after one round of rework, and development never saw the compliance report');busy=false;$('#rwGo').disabled=false;
+  }
+  $('#rwGo').onclick=go;$('#rwReset').onclick=reset;
+})();
+
+/* ---------- KEYBOARD / ARIA ---------- */
+(function(){
+  const act=(el,fn)=>{el.setAttribute('tabindex','0');el.setAttribute('role','button');el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();fn(el)}})};
+  $$('#orgsvg .node').forEach(g=>{const k=g.dataset.k;g.setAttribute('aria-label',(AG[k]?AG[k].n:k)+', click for details');act(g,x=>x.dispatchEvent(new MouseEvent('click',{bubbles:true})))});
+  const mb=$('#mcpband');mb.setAttribute('aria-label','MCP layer, click for details');act(mb,x=>x.dispatchEvent(new MouseEvent('click',{bubbles:true})));
+  $$('#mainSc .ly').forEach(l=>{l.setAttribute('aria-label',l.dataset.k+' layer');act(l,x=>selLayer(x.dataset.k))});
+  $$('#layerlist .lli').forEach(l=>act(l,x=>selLayer(x.dataset.k)));
+  [['#mdlCloud'],['#mdlLocal']].forEach(a=>act($(a[0]),x=>x.click()));
+  $('#orgsvg').setAttribute('aria-describedby','orgLog');
+  $('#orgLog').setAttribute('aria-live','polite');$('#rwLog').setAttribute('aria-live','polite');$('#fwlog').setAttribute('aria-live','polite');
+})();
+</script>
+</body>
+</html>
