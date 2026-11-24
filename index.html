@@ -603,10 +603,11 @@ footer{max-width:1180px;margin:0 auto;padding:40px 24px 80px;color:var(--dim);fo
   <h2 class="rv">Twelve agents, <em>three teams.</em> Spin it, click one.</h2>
   <p class="lede rv">Drag to turn the scene. Click any block to see what that agent does and how it has done in my own test runs. A plain-code Orchestrator sits above all of them and never writes a requirement. The flat, step-by-step version of the same run is in the section above, so you have both.</p>
   <div class="iso3 rv">
-    <div class="isoview"><svg id="iso1" viewBox="0 0 900 560" role="img" aria-label="3D view of the development, compliance and publishing teams. Click an agent for details."></svg>
-      <div class="isobtns"><button class="btn pri" id="iso1Play">&#9654; Play a run</button><button class="btn" id="iso1Reset">Reset</button><span class="mono hint">drag to rotate</span></div></div>
+    <div class="isoview"><svg id="iso1" viewBox="0 0 900 660" role="img" aria-label="3D view of the development, compliance and publishing teams. Click an agent for details."></svg>
+      <div class="isobtns"><button class="btn pri" id="iso1Play">&#9654; Play a run</button><button class="btn" id="iso1Reset">Reset</button><button class="btn" id="iso1Mode">Mode: stage, publish at end</button><span class="mono hint">drag to rotate</span></div></div>
     <div class="card isoinfo" id="iso1Info"></div>
   </div>
+  <p class="isocap rv" id="iso1Cap"></p>
   <div class="statstrip rv">
     <div class="card"><b>15 of 17</b><span>cloud runs finished all seven development agents</span></div>
     <div class="card"><b>12 / 4 min</b><span>median run time, haiku / sonnet</span></div>
@@ -1376,7 +1377,7 @@ const sleep=ms=>new Promise(r=>setTimeout(r,ms));
    ====================================================================== */
 const svg1=document.getElementById('iso1');
 if(svg1){
-const S=Scene(svg1,{yaw:-.62,scale:50,cx:450,cy:292,ox:-.4,oy:1.9});
+const S=Scene(svg1,{yaw:-.62,scale:38,cx:450,cy:330,ox:.3,oy:2.0});
 const N={ /* world positions: x right, y toward the viewer */
  intake:{x:-6.3,y:-1.6,k:'dev',l:'intake'},planner:{x:-4.7,y:-1.6,k:'dev',l:'planner'},req:{x:-3.1,y:-1.6,k:'dev',l:'req'},design:{x:-1.5,y:-1.6,k:'dev',l:'design'},
  coding:{x:-3.8,y:.5,k:'dev',l:'coding+ut'},testproc:{x:-1.8,y:.5,k:'dev',l:'test proc'},testcode:{x:-1.8,y:2.2,k:'dev',l:'test code'},
@@ -1384,12 +1385,21 @@ const N={ /* world positions: x right, y toward the viewer */
  document:{x:2.6,y:4.1,k:'pub',l:'document'},importer:{x:2.6,y:5.4,k:'pub',l:'importer'}};
 const EDGE=[['intake','planner'],['planner','req'],['req','design'],['design','coding'],['design','testproc'],['testproc','testcode'],['coding','testcode']];
 const COL={dev:C.cy,cmp:C.vi,pub:C.am};
-const st={};let sel=null,recN=0,platN=0,auditOK=false,running=false,pk=null;
+const st={};let sel=null,recN=0,platN=0,auditOK=false,running=false,pk=null,direct=false;
+const ZM=-1.7,ZP=-3.5,PX=5.7,PY=4.9;   /* MCP layer and platform layer sit under the teams */
+const TOOLN={intake:'create_customer_req',planner:'create_system_req',req:'create_hlr',design:'create_llr',coding:'create_source_ref',testproc:'create_test_case',testcode:'create_test_procedure'};
 Object.keys(N).forEach(k=>st[k]='idle');
 const stFill=k=>({idle:'#1c2d52',work:'#6b4a12',done:'#14502f',fail:'#5a1c25'})[st[k]];
 const stStroke=k=>({idle:COL[N[k].k],work:C.am,done:C.gr,fail:C.rd})[st[k]];
 
 S.draw=g=>{
+  /* the platform, two layers down, and the MCP layer above it */
+  S.poly(g,[[3.2,2.6,ZP],[8.2,2.6,ZP],[8.2,7.2,ZP],[3.2,7.2,ZP]],'#2b2210',C.am,.92,'',1.2);
+  S.cyl(g,PX,PY,.7,.8,'#4a3510',C.am,ZP,auditOK||platN>0?C.am:null);
+  S.text(g,PX,PY,ZP+1.75,'PLATFORM '+platN+' records',C.am,10,'middle',600);
+  S.poly(g,[[-7.8,-3.3,ZM],[8.4,-3.3,ZM],[8.4,7.2,ZM],[-7.8,7.2,ZM]],C.am,C.am,.07,'6 4',1.3);
+  S.text(g,-7.6,7.0,ZM+.15,'MCP · MODEL CONTEXT PROTOCOL',C.am,10,'start',700);
+  S.text(g,-7.6,6.35,ZM+.15,'create + read tools only: no update, no delete',C.mut,9,'start',500);
   /* platforms */
   S.slab(g,-7.3,-.4,-2.7,3.1,'#16264a',C.l2);
   S.slab(g,1.6,4.3,-2.7,3.1,'#1d1840','#6d58b8');
@@ -1403,21 +1413,17 @@ S.draw=g=>{
   ['checker','adequacy','qa'].forEach(k=>S.line(g,[.5,0,.32],[N[k].x,N[k].y,.32],'#6d58b8',1.4,'3 4',.8));
   S.line(g,[N.qa.x,N.qa.y,.32],[N.document.x,N.document.y,.32],auditOK?C.am:'#4a3b1d',1.6,'3 4');
   S.line(g,[N.document.x,N.document.y,.32],[N.importer.x,N.importer.y,.32],auditOK?C.am:'#4a3b1d',1.6,'3 4');
-  S.line(g,[N.importer.x,N.importer.y,.32],[6.9,5.0,.32],auditOK?C.am:'#4a3b1d',1.8,'3 4');
   /* the firewall: a glass wall, with the record standing in the gap */
   S.poly(g,[[.5,-3.2,0],[.5,3.4,0],[.5,3.4,2.6],[.5,-3.2,2.6]],'#ff5d6c','#ff5d6c',.07,'5 4',1.3);
   S.text(g,.5,-3.2,2.9,'FIREWALL · ONLY THE RECORD CROSSES',C.rd,8,'middle',600);
   S.cyl(g,.5,0,.55,.9,'#12395a',C.cy,.18,C.cy);
   S.text(g,.5,0,1.5,'RECORD '+recN,C.cy,9,'middle',600);
-  /* platform at the far end */
-  S.cyl(g,6.9,5.0,.62,.8,'#4a3510',C.am,.18,auditOK?C.am:null);
-  S.text(g,6.9,5.0,1.55,'PLATFORM '+platN,C.am,10,'middle',600);
   /* agents, far to near */
   Object.keys(N).sort((a,b)=>S.P(N[a].x,N[a].y,0)[2]-S.P(N[b].x,N[b].y,0)[2]).forEach(k=>{
     const n=N[k];S.box(g,n.x,n.y,1.0,1.0,.62,stFill(k),.18,k===sel?'#ffffff':stStroke(k),st[k]==='work'?C.am:null);
     const hit=S.box;void hit});
   Object.keys(N).forEach(k=>{const n=N[k];S.text(g,n.x,n.y,1.12,n.l,k===sel?'#fff':'#c7d6f5',11,'middle',k===sel?700:500)});
-  if(pk)S.dot(g,pk,C.cy,5);
+  if(pk){S.dot(g,pk,pk[2]<0?C.am:C.cy,5);if(pk.tool)S.text(g,pk[0],pk[1],pk[2]+.7,pk.tool,C.am,9,'middle',600)}
   /* invisible hit targets: one circle per agent, so clicking works from any angle */
   Object.keys(N).forEach(k=>{const p=S.P(N[k].x,N[k].y,.5);const c=mk('circle',{cx:p[0],cy:p[1],r:S.scale*.8,fill:'transparent',style:'cursor:pointer'},g);c.addEventListener('click',()=>pick(k))});
 };
@@ -1447,20 +1453,32 @@ function pick(k){sel=k;S.render();const n=N[k],a=(typeof AG!=='undefined'&&AG[k]
    (a?'<div class="isorw"><span>Reads</span>'+a.r+'</div><div class="isorw"><span>Writes</span>'+a.w+'</div>':'')+
    '<div class="isostat"><b>'+i[0]+'</b><span>'+i[1]+'</span></div><p style="color:var(--dim);font-size:13px;margin-top:8px">'+i[2]+'</p>'}
 
+async function viaMCP(k,bulk){   /* agent -> down through MCP -> along it -> down onto the platform */
+  const n=N[k],tool=bulk?'create_* x '+recN:(TOOLN[k]||'');
+  const at=(x,y,z)=>{const a=[x,y,z];a.tool=tool;return a};
+  await S.play(280,t=>{pk=at(n.x,n.y,.4+(ZM-.4)*t)});
+  await S.play(360,t=>{pk=at(n.x+(PX-n.x)*t,n.y+(PY-n.y)*t,ZM)});
+  await S.play(280,t=>{pk=at(PX,PY,ZM+(ZP+.9-ZM)*t)});
+  pk=null;platN=bulk?recN:platN+1;S.render()}
 async function play(){
   if(running)return;running=true;reset(true);
-  const go=async(k,from)=>{st[k]='work';S.render();if(from){await S.play(480,t=>{pk=[from.x+(N[k].x-from.x)*t,from.y+(N[k].y-from.y)*t,.4]});pk=null}await sleep(reduce?0:260);st[k]='done';recN++;S.render()};
+  const go=async(k,from)=>{st[k]='work';S.render();if(from){await S.play(480,t=>{pk=[from.x+(N[k].x-from.x)*t,from.y+(N[k].y-from.y)*t,.4]});pk=null}await sleep(reduce?0:260);st[k]='done';recN++;S.render();
+    if(direct&&N[k].k==='dev')await viaMCP(k,false)};   /* direct mode: each approved write goes straight to the platform, then the next agent continues */
   await go('intake');await go('planner',N.intake);await go('req',N.planner);await go('design',N.req);
   await Promise.all([go('coding',N.design),go('testproc',N.design)]);
   await go('testcode',N.testproc);
   for(const k of ['checker','adequacy','qa']){await go(k,{x:.5,y:0})}
   auditOK=true;S.render();await sleep(reduce?0:350);
   await go('document',N.qa);await go('importer',N.document);
-  await S.play(600,t=>{pk=[N.importer.x+(6.9-N.importer.x)*t,N.importer.y+(5.0-N.importer.y)*t,.4]});pk=null;platN=recN;S.render();
+  if(!direct)await viaMCP('importer',true);   /* stage mode: nothing leaves until the audit passes and a person says yes, then one write */
   running=false}
 function reset(keep){Object.keys(st).forEach(k=>st[k]='idle');recN=0;platN=0;auditOK=false;pk=null;if(!keep)running=false;S.render()}
 document.getElementById('iso1Play').onclick=play;
 document.getElementById('iso1Reset').onclick=()=>{if(!running)reset(false)};
+const capEl=document.getElementById('iso1Cap'),modeBtn=document.getElementById('iso1Mode');
+function setCap(){capEl.textContent=direct?'Direct mode, as first drawn on the whiteboard: each approved item goes straight through MCP to the platform, then the next agent continues. Easy to follow, but the platform has no update or delete, so a mistake stays.':'Stage mode (the safe default): agents write to the record, nothing reaches the platform until the audit passes and a person says yes, then one write goes through MCP and is read back.';
+  modeBtn.textContent=direct?'Mode: send each write right away':'Mode: stage, publish at end'}
+modeBtn.onclick=()=>{if(running)return;direct=!direct;reset(false);setCap()};setCap();
 S.render();pick('adequacy');sel=null;S.render();
 document.getElementById('iso1Info').innerHTML='<div class="mono" style="font-size:11px;letter-spacing:.14em;color:var(--dim);text-transform:uppercase;margin-bottom:8px">Click any block</div><div class="big2">Twelve agents, three teams.</div><p class="mut" style="color:var(--mut);font-size:15px;margin-top:6px">Each block is one agent. Click it to see what it does and how it has performed in my own test runs. Press play to watch a project go through.</p>';
 }
