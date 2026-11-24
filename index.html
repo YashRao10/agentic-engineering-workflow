@@ -372,6 +372,27 @@ footer{max-width:1180px;margin:0 auto;padding:40px 24px 80px;color:var(--dim);fo
 
 .gl{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;margin-top:40px}
 .gl h3{font-size:18px;margin-bottom:8px;color:var(--cy)}.gl p{color:var(--mut);font-size:15px}
+
+/* ---------- 3D scenes ---------- */
+.iso3{display:grid;grid-template-columns:1.7fr 1fr;gap:22px;margin-top:40px;align-items:start}
+@media(max-width:960px){.iso3{grid-template-columns:1fr}}
+.isoview{position:relative;border:1px solid var(--line);border-radius:20px;background:radial-gradient(600px 340px at 50% 55%,rgba(90,209,255,.07),transparent 70%),var(--bg2);cursor:grab;overflow:hidden}
+.isoview:active{cursor:grabbing}
+.isoview svg{display:block;width:100%;height:auto;touch-action:pan-y;user-select:none}
+.isobtns{position:absolute;left:14px;bottom:12px;display:flex;gap:10px;align-items:center}
+.isobtns .hint{font-size:11px;color:var(--dim);letter-spacing:.08em}
+.isoinfo{min-height:300px}
+.isorw{display:flex;gap:12px;font-size:14px;color:var(--mut);padding:7px 0;border-top:1px solid var(--line)}
+.isorw span{font:600 11px var(--mono);color:var(--dim);letter-spacing:.12em;text-transform:uppercase;min-width:58px;padding-top:2px}
+.isostat{margin-top:12px;padding:14px 16px;border:1px solid var(--line2);border-radius:14px;background:rgba(90,209,255,.05)}
+.isostat b{display:block;font-size:30px;line-height:1.1;color:var(--cy);font-weight:700}
+.isostat span{font-size:14px;color:var(--mut)}
+.statstrip{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-top:22px}
+@media(max-width:960px){.statstrip{grid-template-columns:repeat(2,1fr)}}
+.statstrip .card b{display:block;font-size:26px;line-height:1.15;color:var(--cy);font-weight:700}
+.statstrip .card span{display:block;font-size:13px;color:var(--mut);margin-top:6px}
+.isofoot{color:var(--dim);font-size:13px;margin-top:14px;max-width:820px}
+.isocap{font-size:14px;color:var(--mut);margin-top:10px;min-height:22px}
 </style>
 </head>
 <body>
@@ -576,6 +597,26 @@ footer{max-width:1180px;margin:0 auto;padding:40px 24px 80px;color:var(--dim);fo
 </section>
 
 <!-- STACK -->
+<!-- 3D AGENTS -->
+<section id="s2c" data-nav="Agents in 3D">
+  <div class="tag">04 · Meet the agents</div>
+  <h2 class="rv">Twelve agents, <em>three teams.</em> Spin it, click one.</h2>
+  <p class="lede rv">Drag to turn the scene. Click any block to see what that agent does and how it has done in my own test runs. A plain-code Orchestrator sits above all of them and never writes a requirement.</p>
+  <div class="iso3 rv">
+    <div class="isoview"><svg id="iso1" viewBox="0 0 900 560" role="img" aria-label="3D view of the development, compliance and publishing teams. Click an agent for details."></svg>
+      <div class="isobtns"><button class="btn pri" id="iso1Play">&#9654; Play a run</button><button class="btn" id="iso1Reset">Reset</button><span class="mono hint">drag to rotate</span></div></div>
+    <div class="card isoinfo" id="iso1Info"></div>
+  </div>
+  <div class="statstrip rv">
+    <div class="card"><b>15 of 17</b><span>cloud runs finished all seven development agents</span></div>
+    <div class="card"><b>12 / 4 min</b><span>median run time, haiku / sonnet</span></div>
+    <div class="card"><b>67% to 100%</b><span>planted defects caught, after the survivor-feedback fix</span></div>
+    <div class="card"><b>224</b><span>automated checks, none call a model</span></div>
+    <div class="card"><b>5</b><span>guards in front of every publish</span></div>
+  </div>
+  <p class="isofoot rv">These come from my own runs on invented sample briefs with cloud models. It is a small sample, not a benchmark. Three early runs are left out because the command-line tool broke during them. Medians are over finished runs only.</p>
+</section>
+
 <section id="s2b" data-nav="The stack">
   <div class="tag">03 · The whole stack</div>
   <h2 class="rv">Five layers, and <em>a person on top.</em></h2>
@@ -676,6 +717,7 @@ footer{max-width:1180px;margin:0 auto;padding:40px 24px 80px;color:var(--dim);fo
       <span class="chip">checker</span><span class="chip">test adequacy</span><span class="chip">qa</span>
       <p class="mut" style="color:var(--mut);font-size:15px;margin-top:6px">Reads the record. Writes findings to its own area. Uses no model, so nothing grades its own work.</p></div>
   </div>
+  <div class="isoview rv" style="margin-top:26px"><svg id="iso3" viewBox="0 0 900 470" role="img" aria-label="A glass wall between the development and compliance teams. Messages bounce off it; only the record crosses."></svg></div>
   <div class="fwbtns rv">
     <button class="btn" data-fw="0">Dev agent messages a compliance agent <em>try</em></button>
     <button class="btn" data-fw="1">Compliance agent messages a dev agent <em>try</em></button>
@@ -709,6 +751,8 @@ footer{max-width:1180px;margin:0 auto;padding:40px 24px 80px;color:var(--dim);fo
   <div class="tag">06 · Proving it is complete</div>
   <h2 class="rv">Every requirement has to <em>trace all the way down.</em></h2>
   <p class="lede rv">Requirement, design, code, test, and test procedure. If any link is missing, the audit says so. Break something and watch the verdict change. The requirements below are invented for the example.</p>
+  <div class="card isoview rv" style="margin-top:28px;padding:0"><svg id="iso2" viewBox="0 0 860 560" role="img" aria-label="Four stacked planes: requirements, design, code and tests, joined by links"></svg></div>
+  <p class="isocap" id="iso2Cap"></p>
   <div class="mx card rv">
     <div class="mxtop">
       <button class="btn bad" id="mxDel">Delete the tests</button>
@@ -1276,6 +1320,227 @@ $$('main section .tag').forEach((t,i)=>{t.textContent=String(i+1).padStart(2,'0'
   [['#mdlCloud'],['#mdlLocal']].forEach(a=>act($(a[0]),x=>x.click()));
   $('#orgsvg').setAttribute('aria-describedby','orgLog');
   $('#orgLog').setAttribute('aria-live','polite');$('#rwLog').setAttribute('aria-live','polite');$('#fwlog').setAttribute('aria-live','polite');
+})();
+</script>
+<script>
+/* ---------- 3D SCENES (isometric SVG, no libraries) ---------- */
+(function(){
+'use strict';
+const NS='http://www.w3.org/2000/svg';
+const reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+const mk=(t,a,p)=>{const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);if(p)p.appendChild(e);return e};
+const C={cy:'#5ad1ff',vi:'#a78bfa',am:'#ffb454',gr:'#4ade80',rd:'#ff5d6c',l2:'#2b3f6b',mut:'#8a9bc0',dim:'#5b6c91'};
+function shade(hex,f){const n=parseInt(hex.slice(1),16),r=n>>16&255,g=n>>8&255,b=n&255;const c=v=>Math.max(0,Math.min(255,Math.round(v*f)));return 'rgb('+c(r)+','+c(g)+','+c(b)+')'}
+
+/* a scene = projection + a render function; yaw is the only thing the user turns */
+function Scene(svg,cfg){
+  const S={svg,yaw:cfg.yaw,pitch:.95,scale:cfg.scale,cx:cfg.cx,cy:cfg.cy,ox:cfg.ox||0,oy:cfg.oy||0,draw:null,raf:0,anim:null,yaw0:cfg.yaw};
+  S.P=(x,y,z)=>{x-=S.ox;y-=S.oy;const c=Math.cos(S.yaw),s=Math.sin(S.yaw),rx=x*c-y*s,ry=x*s+y*c;return [S.cx+rx*S.scale,S.cy+(ry*Math.sin(S.pitch)-z*Math.cos(S.pitch))*S.scale,ry]};
+  S.poly=(g,pts,fill,stroke,op,dash,sw)=>{const d=pts.map(p=>S.P(p[0],p[1],p[2])).map(p=>p[0].toFixed(1)+','+p[1].toFixed(1)).join(' ');
+    return mk('polygon',{points:d,fill:fill||'none',stroke:stroke||'none','stroke-width':sw||1,'fill-opacity':op==null?1:op,'stroke-dasharray':dash||''},g)};
+  S.slab=(g,x0,x1,y0,y1,color,stroke,h)=>{h=h||.18;
+    S.poly(g,[[x0,y0,0],[x1,y0,0],[x1,y1,0],[x0,y1,0]],shade(color,.55),null,1);
+    const sy=Math.sin(S.yaw),cy=Math.cos(S.yaw);
+    if(sy>0)S.poly(g,[[x1,y0,0],[x1,y1,0],[x1,y1,h],[x1,y0,h]],shade(color,.7),null,1); else S.poly(g,[[x0,y0,0],[x0,y1,0],[x0,y1,h],[x0,y0,h]],shade(color,.7),null,1);
+    if(cy>0)S.poly(g,[[x0,y1,0],[x1,y1,0],[x1,y1,h],[x0,y1,h]],shade(color,.85),null,1); else S.poly(g,[[x0,y0,0],[x1,y0,0],[x1,y0,h],[x0,y0,h]],shade(color,.85),null,1);
+    S.poly(g,[[x0,y0,h],[x1,y0,h],[x1,y1,h],[x0,y1,h]],color,stroke,.96,'',1.2)};
+  S.box=(g,x,y,w,d,h,color,z0,stroke,glow)=>{z0=z0||0;const x0=x-w/2,x1=x+w/2,y0=y-d/2,y1=y+d/2,z1=z0+h,sy=Math.sin(S.yaw),cy=Math.cos(S.yaw);
+    const faces=[[1,0,[[x1,y0,z0],[x1,y1,z0],[x1,y1,z1],[x1,y0,z1]],.62],[-1,0,[[x0,y0,z0],[x0,y1,z0],[x0,y1,z1],[x0,y0,z1]],.62],
+                 [0,1,[[x0,y1,z0],[x1,y1,z0],[x1,y1,z1],[x0,y1,z1]],.82],[0,-1,[[x0,y0,z0],[x1,y0,z0],[x1,y0,z1],[x0,y0,z1]],.82]];
+    if(glow){const p=S.P(x,y,z0+h/2);mk('ellipse',{cx:p[0],cy:p[1],rx:S.scale*w*1.1,ry:S.scale*w*.7,fill:glow,'fill-opacity':.16},g)}
+    faces.forEach(f=>{if(f[0]*sy+f[1]*cy>0)S.poly(g,f[2],shade(color,f[3]),stroke,1,'',1)});
+    S.poly(g,[[x0,y0,z1],[x1,y0,z1],[x1,y1,z1],[x0,y1,z1]],shade(color,1.12),stroke,1,'',1.2)};
+  S.cyl=(g,x,y,r,h,color,stroke,z0,glow)=>{z0=z0||0;const b=S.P(x,y,z0),t=S.P(x,y,z0+h),R=r*S.scale,E=R*Math.sin(S.pitch);
+    if(glow)mk('ellipse',{cx:b[0],cy:(b[1]+t[1])/2,rx:R*1.6,ry:R*1.1,fill:glow,'fill-opacity':.15},g);
+    mk('path',{d:'M'+(b[0]-R)+','+t[1]+' L'+(b[0]-R)+','+b[1]+' A'+R+','+E+' 0 0 0 '+(b[0]+R)+','+b[1]+' L'+(b[0]+R)+','+t[1]+' Z',fill:shade(color,.7),stroke:stroke,'stroke-width':1.2},g);
+    mk('ellipse',{cx:t[0],cy:t[1],rx:R,ry:E,fill:shade(color,1.1),stroke:stroke,'stroke-width':1.2},g)};
+  S.line=(g,a,b,color,w,dash,op)=>{const p=S.P(a[0],a[1],a[2]),q=S.P(b[0],b[1],b[2]);return mk('line',{x1:p[0],y1:p[1],x2:q[0],y2:q[1],stroke:color,'stroke-width':w||1.5,'stroke-dasharray':dash||'','stroke-opacity':op==null?1:op,'stroke-linecap':'round'},g)};
+  S.text=(g,x,y,z,txt,color,size,anchor,weight)=>{const p=S.P(x,y,z);const t=mk('text',{x:p[0],y:p[1],fill:color||C.mut,'font-size':size||10,'text-anchor':anchor||'middle','font-family':'JetBrains Mono,ui-monospace,monospace','font-weight':weight||400,'pointer-events':'none'},g);t.textContent=txt;return t};
+  S.dot=(g,a,color,r)=>{const p=S.P(a[0],a[1],a[2]);mk('circle',{cx:p[0],cy:p[1],r:r||5,fill:color,filter:'drop-shadow(0 0 5px '+color+')'},g)};
+  S.render=()=>{while(svg.firstChild)svg.removeChild(svg.firstChild);const g=mk('g',{},svg);S.draw(g)};
+  /* drag to turn (horizontal only, so a vertical swipe still scrolls the page) */
+  let sx=null,y0=0;
+  svg.addEventListener('pointerdown',e=>{sx=e.clientX;y0=S.yaw;try{svg.setPointerCapture(e.pointerId)}catch(_){}});
+  svg.addEventListener('pointermove',e=>{if(sx==null)return;S.yaw=Math.max(-1.25,Math.min(.5,y0+(e.clientX-sx)*.008));S.render()});
+  const up=()=>{sx=null};svg.addEventListener('pointerup',up);svg.addEventListener('pointercancel',up);
+  /* run an animation function for ms milliseconds (fn(t 0..1) mutates state, then we redraw) */
+  S.play=(ms,fn)=>new Promise(res=>{if(reduce){fn(1);S.render();res();return}const t0=performance.now();(function f(now){const t=Math.min(1,(now-t0)/ms);fn(t);S.render();if(t<1)requestAnimationFrame(f);else res()})(t0)});
+  S.visible=()=>{const r=svg.getBoundingClientRect();return r.bottom>0&&r.top<innerHeight};
+  return S;
+}
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+
+/* ======================================================================
+   SCENE 1: the three teams, with stats per agent
+   ====================================================================== */
+const svg1=document.getElementById('iso1');
+if(svg1){
+const S=Scene(svg1,{yaw:-.62,scale:41,cx:450,cy:292,ox:-.4,oy:1.7});
+const N={ /* world positions: x right, y toward the viewer */
+ intake:{x:-6.3,y:-1.6,k:'dev',l:'intake'},planner:{x:-4.7,y:-1.6,k:'dev',l:'planner'},req:{x:-3.1,y:-1.6,k:'dev',l:'req'},design:{x:-1.5,y:-1.6,k:'dev',l:'design'},
+ coding:{x:-3.8,y:.5,k:'dev',l:'coding+ut'},testproc:{x:-1.8,y:.5,k:'dev',l:'test proc'},testcode:{x:-1.8,y:2.2,k:'dev',l:'test code'},
+ checker:{x:2.6,y:-1.6,k:'cmp',l:'checker'},adequacy:{x:2.6,y:.2,k:'cmp',l:'adequacy'},qa:{x:2.6,y:1.9,k:'cmp',l:'qa'},
+ document:{x:2.6,y:4.1,k:'pub',l:'document'},importer:{x:2.6,y:5.5,k:'pub',l:'importer'}};
+const EDGE=[['intake','planner'],['planner','req'],['req','design'],['design','coding'],['design','testproc'],['testproc','testcode'],['coding','testcode']];
+const COL={dev:C.cy,cmp:C.vi,pub:C.am};
+const st={};let sel=null,recN=0,platN=0,auditOK=false,running=false,pk=null;
+Object.keys(N).forEach(k=>st[k]='idle');
+const stFill=k=>({idle:'#1c2d52',work:'#6b4a12',done:'#14502f',fail:'#5a1c25'})[st[k]];
+const stStroke=k=>({idle:COL[N[k].k],work:C.am,done:C.gr,fail:C.rd})[st[k]];
+
+S.draw=g=>{
+  /* platforms */
+  S.slab(g,-7.3,-.4,-2.7,3.1,'#16264a',C.l2);
+  S.slab(g,1.6,4.3,-2.7,3.1,'#1d1840','#6d58b8');
+  S.slab(g,1.6,4.3,3.4,6.1,'#2b2210','#8a6a2f');
+  S.text(g,-7.1,-2.5,.3,'DEVELOPMENT TEAM',C.mut,9,'start',600);
+  S.text(g,1.8,-2.5,.3,'COMPLIANCE TEAM',C.vi,9,'start',600);
+  S.text(g,1.8,3.6,.3,'PUBLISHING · CLEAN AUDIT ONLY',C.am,8,'start',600);
+  /* handoff arrows on the platform */
+  EDGE.forEach(e=>S.line(g,[N[e[0]].x,N[e[0]].y,.32],[N[e[1]].x,N[e[1]].y,.32],st[e[0]]==='done'?C.gr:'#33497a',st[e[0]]==='done'?2.4:1.6));
+  ['design','testcode'].forEach(k=>S.line(g,[N[k].x,N[k].y,.32],[.5,0,.32],st[k]==='done'?C.cy:'#243658',1.5,'4 4'));
+  ['checker','adequacy','qa'].forEach(k=>S.line(g,[.5,0,.32],[N[k].x,N[k].y,.32],'#6d58b8',1.4,'3 4',.8));
+  S.line(g,[N.qa.x,N.qa.y,.32],[N.document.x,N.document.y,.32],auditOK?C.am:'#4a3b1d',1.6,'3 4');
+  S.line(g,[N.document.x,N.document.y,.32],[N.importer.x,N.importer.y,.32],auditOK?C.am:'#4a3b1d',1.6,'3 4');
+  S.line(g,[N.importer.x,N.importer.y,.32],[6.9,4.8,.32],auditOK?C.am:'#4a3b1d',1.8,'3 4');
+  /* the firewall: a glass wall, with the record standing in the gap */
+  S.poly(g,[[.5,-3.2,0],[.5,3.4,0],[.5,3.4,2.6],[.5,-3.2,2.6]],'#ff5d6c','#ff5d6c',.07,'5 4',1.3);
+  S.text(g,.5,-3.2,2.9,'FIREWALL · ONLY THE RECORD CROSSES',C.rd,8,'middle',600);
+  S.cyl(g,.5,0,.55,.9,'#12395a',C.cy,.18,C.cy);
+  S.text(g,.5,0,1.5,'RECORD '+recN,C.cy,9,'middle',600);
+  /* platform at the far end */
+  S.cyl(g,6.9,4.8,.62,.8,'#4a3510',C.am,.18,auditOK?C.am:null);
+  S.text(g,6.9,4.8,1.55,'PLATFORM '+platN,C.am,9,'middle',600);
+  /* agents, far to near */
+  Object.keys(N).sort((a,b)=>S.P(N[a].x,N[a].y,0)[2]-S.P(N[b].x,N[b].y,0)[2]).forEach(k=>{
+    const n=N[k];S.box(g,n.x,n.y,1.0,1.0,.62,stFill(k),.18,k===sel?'#ffffff':stStroke(k),st[k]==='work'?C.am:null);
+    const hit=S.box;void hit});
+  Object.keys(N).forEach(k=>{const n=N[k];S.text(g,n.x,n.y,1.12,n.l,k===sel?'#fff':'#c7d6f5',10,'middle',k===sel?700:500)});
+  if(pk)S.dot(g,pk,C.cy,5);
+  /* invisible hit targets: one circle per agent, so clicking works from any angle */
+  Object.keys(N).forEach(k=>{const p=S.P(N[k].x,N[k].y,.5);const c=mk('circle',{cx:p[0],cy:p[1],r:S.scale*.8,fill:'transparent',style:'cursor:pointer'},g);c.addEventListener('click',()=>pick(k))});
+};
+
+/* info panel: what the agent does (reuses the org diagram text) + how it has performed */
+const INFO={
+ intake:['1 : 1','change request per behavior in the brief','Checked by a coverage rule in code, not by the model.'],
+ planner:['Redrafts itself','when a behavior is merged or missing','The self-check runs before a person ever sees the draft.'],
+ req:['9 / 12.5','high-level requirements per run (haiku / sonnet)','Median of finished cloud runs on invented briefs.'],
+ design:['18 / 24','low-level requirements per run (haiku / sonnet)','Each one traces up to a high-level requirement or the draft is sent back.'],
+ coding:['18 / 24','source functions per run, one per low-level requirement','Built with a real C compiler before anyone reviews it.'],
+ testproc:['16 / 16','test cases per run (haiku / sonnet)','Every high-level requirement needs at least one.'],
+ testcode:['16 of 16','tests built and passed on the real code, best run','Another run passed 14 of 14. Build errors go back to the agent as feedback.'],
+ checker:['0 models','plain rules, the same answer every time','It caught 3 real gaps in the first local-model record.'],
+ adequacy:['67% to 100%','planted defects caught, same brief','Before and after survivors were sent back with the whole function around them.'],
+ qa:['224','automated checks guard the system','None of them call a model, so they cost nothing to run.'],
+ document:['2','documents per project, with no model call','Design description and test report, written straight from the audited record.'],
+ importer:['9 of 9','artifacts written to a sandbox project and read back','The one live write so far. Five guards sit in front of it.']};
+const TXT={document:'Renders the design description and the test report from the audited record. It uses no model, so the documents cannot say anything the record does not. It refuses unless the audit is clean and unchanged.',
+ importer:'Plans every platform call, waits for a human yes, writes, then reads the records back and compares them with what was sent.'};
+const TEAM={dev:'Development team',cmp:'Compliance team',pub:'Publishing team'};
+function pick(k){sel=k;S.render();const n=N[k],a=(typeof AG!=='undefined'&&AG[k]);const i=INFO[k];
+  const box=document.getElementById('iso1Info');
+  box.innerHTML='<div class="mono" style="font-size:11px;letter-spacing:.14em;color:var(--dim);text-transform:uppercase;margin-bottom:8px">'+TEAM[n.k]+'</div>'+
+   '<div class="big2" style="color:'+COL[n.k]+'">'+(a?a.n:n.l)+'</div>'+
+   '<p class="mut" style="color:var(--mut);font-size:15px;margin:6px 0 14px">'+(TXT[k]||(a?a.t:''))+'</p>'+
+   (a?'<div class="isorw"><span>Reads</span>'+a.r+'</div><div class="isorw"><span>Writes</span>'+a.w+'</div>':'')+
+   '<div class="isostat"><b>'+i[0]+'</b><span>'+i[1]+'</span></div><p style="color:var(--dim);font-size:13px;margin-top:8px">'+i[2]+'</p>'}
+
+async function play(){
+  if(running)return;running=true;reset(true);
+  const go=async(k,from)=>{st[k]='work';S.render();if(from){await S.play(480,t=>{pk=[from.x+(N[k].x-from.x)*t,from.y+(N[k].y-from.y)*t,.4]});pk=null}await sleep(reduce?0:260);st[k]='done';recN++;S.render()};
+  await go('intake');await go('planner',N.intake);await go('req',N.planner);await go('design',N.req);
+  await Promise.all([go('coding',N.design),go('testproc',N.design)]);
+  await go('testcode',N.testproc);
+  for(const k of ['checker','adequacy','qa']){await go(k,{x:.5,y:0})}
+  auditOK=true;S.render();await sleep(reduce?0:350);
+  await go('document',N.qa);await go('importer',N.document);
+  await S.play(600,t=>{pk=[N.importer.x+(6.9-N.importer.x)*t,N.importer.y+(4.8-N.importer.y)*t,.4]});pk=null;platN=recN;S.render();
+  running=false}
+function reset(keep){Object.keys(st).forEach(k=>st[k]='idle');recN=0;platN=0;auditOK=false;pk=null;if(!keep)running=false;S.render()}
+document.getElementById('iso1Play').onclick=play;
+document.getElementById('iso1Reset').onclick=()=>{if(!running)reset(false)};
+S.render();pick('adequacy');sel=null;S.render();
+document.getElementById('iso1Info').innerHTML='<div class="mono" style="font-size:11px;letter-spacing:.14em;color:var(--dim);text-transform:uppercase;margin-bottom:8px">Click any block</div><div class="big2">Twelve agents, three teams.</div><p class="mut" style="color:var(--mut);font-size:15px;margin-top:6px">Each block is one agent. Click it to see what it does and how it has performed in my own test runs. Press play to watch a project go through.</p>';
+}
+
+/* ======================================================================
+   SCENE 2: traceability as four stacked planes
+   ====================================================================== */
+const svg2=document.getElementById('iso2');
+if(svg2){
+const S=Scene(svg2,{yaw:-.5,scale:44,cx:430,cy:300,ox:0,oy:0});
+const Z={hlr:4.5,llr:3.0,code:1.5,test:0};
+const H=[{id:'HLR-1',x:-2.8},{id:'HLR-2',x:0},{id:'HLR-3',x:2.8}];
+const L=[{id:'LLR-1',x:-3.4,h:0},{id:'LLR-2',x:-2.2,h:0},{id:'LLR-3',x:-.7,h:1},{id:'LLR-4',x:.7,h:1},{id:'LLR-5',x:2.8,h:2}];
+const T=[{id:'TC-1',x:-2.8,h:0},{id:'TC-2',x:-.7,h:1},{id:'TC-3',x:.7,h:1},{id:'TC-4',x:2.8,h:2}];
+let sel=-1,mode='ok';
+const mid=(a)=>a;
+S.draw=g=>{
+  [['hlr','REQUIREMENTS',C.cy],['llr','DESIGN',C.vi],['code','CODE',C.gr],['test','TESTS',C.am]].forEach(p=>{
+    S.slab(g,-4.4,4.4,-1.5,1.5,'#101c38',p[2],.14);S.text(g,-4.3,-1.5,Z[p[0]]+.55,p[1],p[2],9,'start',600)});
+  /* links: requirement -> design -> code, requirement -> test */
+  const on=(h)=>sel===h,anySel=sel>=0;
+  const lk=(a,b,hi,broken)=>S.line(g,a,b,broken?C.rd:(hi?'#ffffff':'#3a5287'),hi?2.4:1.3,broken?'4 4':'',anySel&&!hi?.35:1);
+  L.forEach(l=>{const h=H[l.h];lk([h.x,0,Z.hlr+.3],[l.x,0,Z.llr+.3],on(l.h));lk([l.x,0,Z.llr+.3],[l.x,0,Z.code+.3],on(l.h))});
+  T.forEach(t=>{const h=H[t.h];if(mode==='del'){lk([h.x,.9,Z.hlr+.3],[t.x,.9,Z.test+.3],false,true)}else lk([h.x,.9,Z.hlr+.3],[t.x,.9,Z.test+.3],on(t.h))});
+  const node=(x,y,z,label,color,hi,dim,bad)=>{S.box(g,x,y,.8,.8,.5,bad?'#5a1c25':(hi?shade2(color):'#1c2d52'),z+.14,bad?C.rd:color);S.text(g,x,y,z+.95,label,hi?'#fff':(dim?'#5b6c91':'#c7d6f5'),9,'middle',hi?700:500)};
+  const shade2=c=>c==='#5ad1ff'?'#1b6a8c':c==='#a78bfa'?'#4b3a8c':c==='#4ade80'?'#1b6a3f':'#7a5a18';
+  const dimmed=h=>anySel&&sel!==h;
+  T.forEach(t=>{if(mode==='del')return;node(t.x,.9,Z.test,t.id,C.am,on(t.h),dimmed(t.h))});
+  L.forEach(l=>{node(l.x,0,Z.code,'src',C.gr,on(l.h),dimmed(l.h))});
+  L.forEach(l=>{node(l.x,0,Z.llr,l.id,C.vi,on(l.h),dimmed(l.h))});
+  H.forEach((h,i)=>{const bad=(mode==='del')||(mode==='stale'&&i===1);node(h.x,0,Z.hlr,h.id,bad?C.rd:C.cy,on(i),dimmed(i),bad);
+    const c=S.P(h.x,0,Z.hlr+1.5);const r=mk('circle',{cx:c[0],cy:c[1],r:S.scale*.9,fill:'transparent',style:'cursor:pointer'},g);r.addEventListener('click',()=>{sel=sel===i?-1:i;S.render();cap()})});
+  if(mode==='del')S.text(g,0,.9,Z.test+.4,'no tests: every requirement is now unverified',C.rd,10,'middle',600);
+  if(mode==='stale')S.text(g,0,0,Z.hlr+1.9,'HLR-2 changed after the audit: its links are stale',C.am,10,'middle',600);
+};
+function cap(){const e=document.getElementById('iso2Cap');if(!e)return;
+  e.textContent=mode==='del'?'Every requirement lost its test, so the audit is NOT READY.':mode==='stale'?'A requirement changed after the audit, so the verdict is thrown away.':(sel>=0?H[sel].id+' lights up its whole chain: design, code and tests.':'Click a requirement to light up its chain. Drag to turn the stack.')}
+const hook=(id,m)=>{const b=document.getElementById(id);if(b)b.addEventListener('click',()=>{mode=m;if(m!=='ok'||true){sel=-1}S.render();cap()})};
+hook('mxDel','del');hook('mxStale','stale');hook('mxReset','ok');
+S.render();cap();
+}
+
+/* ======================================================================
+   SCENE 3: the firewall as a glass wall; the six buttons send packets at it
+   ====================================================================== */
+const svg3=document.getElementById('iso3');
+if(svg3){
+const S=Scene(svg3,{yaw:-.55,scale:46,cx:450,cy:250,ox:.5,oy:0});
+const D={x:-3.6,y:0},K={x:4.6,y:0},R={x:.5,y:0},LN={x:.5,y:-4.2};
+let pk=null,flash=null,recPulse=0;
+S.draw=g=>{
+  S.slab(g,-6.4,-.8,-2.4,2.4,'#16264a',C.cy);S.slab(g,1.8,7.4,-2.4,2.4,'#1d1840',C.vi);
+  S.text(g,-6.2,-2.2,.3,'DEVELOPMENT',C.cy,9,'start',600);S.text(g,2.0,-2.2,.3,'COMPLIANCE',C.vi,9,'start',600);
+  S.cyl(g,R.x,R.y,.6,.9,'#12395a',C.cy,.18,recPulse?C.gr:C.cy);S.text(g,R.x,R.y,1.5,'RECORD',C.cy,9,'middle',600);
+  S.poly(g,[[.5,-3,0],[.5,3,0],[.5,3,2.8],[.5,-3,2.8]],flash?'#ff5d6c':'#5ad1ff',flash?'#ff5d6c':'#5ad1ff',flash?.22:.07,'5 4',1.4);
+  S.text(g,.5,-3,3.1,'FIREWALL',C.rd,9,'middle',600);
+  S.box(g,D.x,D.y,1.2,1.2,.8,'#1c2d52',.18,C.cy);S.text(g,D.x,D.y,1.35,'dev agent',C.cy,10,'middle',600);
+  S.box(g,K.x,K.y,1.2,1.2,.8,'#241d4a',.18,C.vi);S.text(g,K.x,K.y,1.35,'compliance agent',C.vi,10,'middle',600);
+  S.box(g,LN.x,LN.y,.9,.9,.6,'#4a3510',.18,C.am);S.text(g,LN.x,LN.y,1.1,'launcher',C.am,9,'middle',600);
+  if(pk)S.dot(g,[pk.x,pk.y,.9],pk.c,6);
+};
+const mv=(a,b,c,ms)=>S.play(ms,t=>{pk={x:a.x+(b.x-a.x)*t,y:a.y+(b.y-a.y)*t,c}});
+let busy=false;
+async function act(i){
+  if(busy)return;busy=true;flash=null;recPulse=0;
+  const W={x:.2,y:0},W2={x:.8,y:0};
+  if(i===0){await mv(D,W,C.rd,700);flash=1;S.render();await sleep(reduce?0:260);await mv(W,D,C.rd,500)}
+  else if(i===1){await mv(K,W2,C.rd,700);flash=1;S.render();await sleep(reduce?0:260);await mv(W2,K,C.rd,500)}
+  else if(i===2){await mv(D,W,C.rd,700);flash=1;S.render();await sleep(reduce?0:260);await mv(W,D,C.rd,500)}
+  else if(i===3){await mv(D,R,C.gr,800);recPulse=1}
+  else if(i===4){await mv(R,K,C.gr,800)}
+  else if(i===5){await mv(K,LN,C.am,800);await mv(LN,D,C.am,800)}
+  pk=null;flash=null;S.render();await sleep(reduce?0:500);recPulse=0;S.render();busy=false}
+document.querySelectorAll('[data-fw]').forEach(b=>b.addEventListener('click',()=>act(+b.dataset.fw)));
+S.render();
+}
+
+/* hero: a small parallax tilt so the layered stack answers the pointer */
+(function(){const h=document.querySelector('.hero3d'),hero=document.getElementById('s0');if(!h||!hero||reduce)return;
+ hero.addEventListener('pointermove',e=>{const r=hero.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;h.style.transform='translate('+(x*-18).toFixed(1)+'px,'+(y*-14).toFixed(1)+'px) rotate('+(x*3).toFixed(2)+'deg)'});
+ hero.addEventListener('pointerleave',()=>{h.style.transform=''});h.style.transition='transform .25s ease-out'})();
 })();
 </script>
 </body>
