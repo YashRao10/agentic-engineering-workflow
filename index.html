@@ -1375,7 +1375,7 @@ const sleep=ms=>new Promise(r=>setTimeout(r,ms));
    ====================================================================== */
 const svg1=document.getElementById('iso1');
 if(svg1){
-const S=Scene(svg1,{yaw:-.62,scale:51,cx:450,cy:262,ox:-.4,oy:1.9});
+const S=Scene(svg1,{yaw:-.62,scale:50,cx:450,cy:292,ox:-.4,oy:1.9});
 const N={ /* world positions: x right, y toward the viewer */
  intake:{x:-6.3,y:-1.6,k:'dev',l:'intake'},planner:{x:-4.7,y:-1.6,k:'dev',l:'planner'},req:{x:-3.1,y:-1.6,k:'dev',l:'req'},design:{x:-1.5,y:-1.6,k:'dev',l:'design'},
  coding:{x:-3.8,y:.5,k:'dev',l:'coding+ut'},testproc:{x:-1.8,y:.5,k:'dev',l:'test proc'},testcode:{x:-1.8,y:2.2,k:'dev',l:'test code'},
@@ -1394,7 +1394,7 @@ S.draw=g=>{
   S.slab(g,1.6,4.3,-2.7,3.1,'#1d1840','#6d58b8');
   S.slab(g,1.6,4.3,3.4,6.8,'#2b2210','#8a6a2f');
   S.text(g,-7.1,2.95,.3,'DEVELOPMENT TEAM',C.mut,10,'start',600);
-  S.text(g,1.8,2.95,.3,'COMPLIANCE TEAM',C.vi,10,'start',600);
+  S.text(g,1.8,-2.75,.3,'COMPLIANCE TEAM',C.vi,10,'start',600);
   S.text(g,1.8,6.6,.3,'PUBLISHING · CLEAN AUDIT ONLY',C.am,9,'start',600);
   /* handoff arrows on the platform */
   EDGE.forEach(e=>S.line(g,[N[e[0]].x,N[e[0]].y,.32],[N[e[1]].x,N[e[1]].y,.32],st[e[0]]==='done'?C.gr:'#33497a',st[e[0]]==='done'?2.4:1.6));
