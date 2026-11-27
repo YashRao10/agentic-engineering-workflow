@@ -422,6 +422,22 @@ footer{max-width:1180px;margin:0 auto;padding:40px 24px 80px;color:var(--dim);fo
 .pf-plat{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
 .pf-plat span{font-family:var(--mono);font-size:12px;border:1px solid var(--line2);border-radius:999px;padding:6px 12px;color:var(--ink)}
 .pf-plat span::before{content:"\2713  ";color:var(--gr)}
+.vw-tabs{display:flex;flex-wrap:wrap;gap:8px;margin-top:30px;padding:6px;border:1px solid var(--line);border-radius:14px;background:var(--bg2);width:fit-content;max-width:100%}
+.vw-tab{background:transparent;border:0;color:var(--mut);font:600 14px var(--sans);padding:10px 16px;border-radius:10px;transition:.2s}
+.vw-tab:hover{color:var(--ink)}
+.vw-tab.on{background:var(--cy);color:#04121c}
+.vw-tab:focus-visible{outline:2px solid var(--cy);outline-offset:2px}
+.vw-pane{margin-top:34px}
+.vw-pane>h2,.vw-sub>h2{font-size:clamp(24px,3.2vw,36px)}
+.vw-sub{margin-top:90px;padding-top:44px;border-top:1px solid var(--line)}
+.vw-gloss{margin-top:44px;border:1px solid var(--line);border-radius:16px;background:var(--bg2);padding:4px 22px}
+.vw-gloss summary{cursor:pointer;padding:16px 0;font-weight:600;font-size:17px;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:12px}
+.vw-gloss summary::-webkit-details-marker{display:none}
+.vw-gloss summary span{font:12px var(--mono);color:var(--dim);letter-spacing:.12em;text-transform:uppercase}
+.vw-gloss summary::after{content:"+";font:400 24px var(--mono);color:var(--cy)}
+.vw-gloss[open] summary::after{content:"\2212"}
+.vw-gloss[open]{padding-bottom:22px}
+@media(max-width:700px){.vw-tab{padding:9px 12px;font-size:13px}.vw-sub{margin-top:64px;padding-top:32px}}
 .ch{list-style:none;margin-top:36px;position:relative;max-width:900px}
 .ch::before{content:"";position:absolute;left:19px;top:20px;bottom:20px;width:2px;background:linear-gradient(var(--mut),var(--cy),var(--vi),var(--gr),var(--am))}
 .ch-t{display:grid;grid-template-columns:40px 1fr;gap:16px;margin-bottom:14px;position:relative}
@@ -524,8 +540,12 @@ footer{max-width:1180px;margin:0 auto;padding:40px 24px 80px;color:var(--dim);fo
 </section>
 
 <!-- ORG DIAGRAM -->
-<section id="s2" data-nav="The org">
-  <div class="tag">02 · The org, running</div>
+<section id="gwatch" data-nav="Watch it run">
+  <div class="tag">Watch it run</div>
+  <h2 class="rv">One run, <em>three ways to see it.</em></h2>
+  <p class="lede rv">The same system and the same run, shown flat and step by step, as 3D blocks you can spin, or as the five layers of the stack. Pick a view.</p>
+  <div class="vw-tabs rv" role="tablist" aria-label="Watch it run views"><button class="vw-tab on" role="tab" aria-selected="true" aria-controls="s2" data-pane="s2">Step by step</button><button class="vw-tab" role="tab" aria-selected="false" aria-controls="s2c" data-pane="s2c">3D agents</button><button class="vw-tab" role="tab" aria-selected="false" aria-controls="s2b" data-pane="s2b">The five layers</button></div>
+<div class="vw-pane" id="s2" data-label="Step by step">
   <h2 class="rv">Press play and <em>watch a project move</em> through the team.</h2>
   <p class="lede rv">Every agent writes to one shared record and tells the Orchestrator it is done. The Orchestrator releases whoever is next. Nobody talks to anybody directly. The amber layer underneath is MCP, the connector to the certification platform. Click any box to see what it does, then publish at the end.</p>
 
@@ -669,14 +689,10 @@ footer{max-width:1180px;margin:0 auto;padding:40px 24px 80px;color:var(--dim);fo
     </div>
     <div class="log" id="orgLog"><div>Ready. Press play to start a run.</div></div>
   </div>
-</section>
-
-<!-- STACK -->
-<!-- 3D AGENTS -->
-<section id="s2c" data-nav="Agents in 3D">
-  <div class="tag">04 · Meet the agents</div>
+</div>
+<div class="vw-pane" hidden id="s2c" data-label="3D agents">
   <h2 class="rv">Twelve agents, <em>three teams.</em> Spin it, click one.</h2>
-  <p class="lede rv">Drag to turn the scene. Click any block to see what that agent does and how it has done in my own test runs. A plain-code Orchestrator sits above all of them and never writes a requirement. The flat, step-by-step version of the same run is in the section above, so you have both.</p>
+  <p class="lede rv">Drag to turn the scene. Click any block to see what that agent does and how it has done in my own test runs. A plain-code Orchestrator sits above all of them and never writes a requirement. The flat, step-by-step version of the same run is in the Step by step tab, so you have both.</p>
   <div class="iso3 rv">
     <div class="isoview"><svg id="iso1" viewBox="20 100 860 560" role="img" aria-label="3D view of the development, compliance and publishing teams. Click an agent for details."></svg>
       <div class="isobtns"><button class="btn pri" id="iso1Play">&#9654; Play a run</button><button class="btn" id="iso1Reset">Reset</button><button class="btn" id="iso1Mode">Mode: stage, publish at end</button><span class="mono hint">drag to rotate</span></div></div>
@@ -691,10 +707,8 @@ footer{max-width:1180px;margin:0 auto;padding:40px 24px 80px;color:var(--dim);fo
     <div class="card"><b>5</b><span>guards in front of every publish</span></div>
   </div>
   <p class="isofoot rv">These come from my own runs on invented sample briefs with cloud models. It is a small sample, not a benchmark. Three early runs are left out because the command-line tool broke during them. Medians are over finished runs only.</p>
-</section>
-
-<section id="s2b" data-nav="The stack">
-  <div class="tag">03 · The whole stack</div>
+</div>
+<div class="vw-pane" hidden id="s2b" data-label="The five layers">
   <h2 class="rv">Five layers, and <em>a person on top.</em></h2>
   <p class="lede rv">The same system seen from the side. Drag to turn it, pull the layers apart, and click one to see what it does.</p>
   <div class="stack rv">
@@ -711,11 +725,22 @@ footer{max-width:1180px;margin:0 auto;padding:40px 24px 80px;color:var(--dim);fo
       <div class="card" id="layerDetail"><h4 class="mono" style="font-size:11px;letter-spacing:.14em;color:var(--dim);text-transform:uppercase;margin-bottom:8px">Selected layer</h4><div class="big2" id="ldName">Click a layer</div><p id="ldText" style="color:var(--mut);font-size:15px">Each layer only talks to the one directly below it. A person sits above all of them.</p></div>
     </div>
   </div>
+</div>
 </section>
 
+<!-- STACK -->
+<!-- 3D AGENTS -->
+
+
+
+
 <!-- AGENT CYCLE -->
-<section id="s3" data-nav="One agent">
-  <div class="tag">04 · Anatomy of one agent</div>
+<section id="gagent" data-nav="Inside one agent">
+  <div class="tag">Inside one agent</div>
+  <h2 class="rv">What happens <em>inside each step.</em></h2>
+  <p class="lede rv">Every agent runs the same loop, on a model the project is allowed to use, and when the audit finds a problem it goes back to the agent that owns it.</p>
+  <div class="vw-tabs rv" role="tablist" aria-label="Inside one agent views"><button class="vw-tab on" role="tab" aria-selected="true" aria-controls="s3" data-pane="s3">The loop</button><button class="vw-tab" role="tab" aria-selected="false" aria-controls="sroute" data-pane="sroute">Where the model runs</button><button class="vw-tab" role="tab" aria-selected="false" aria-controls="srework" data-pane="srework">When the audit fails</button></div>
+<div class="vw-pane" id="s3" data-label="The loop">
   <h2 class="rv">Every agent runs the <em>same loop.</em></h2>
   <p class="lede rv">Pull the input, draft, check it, ask a person, write it down, tell the Orchestrator. If the person asks for changes, the loop goes around again with their words attached.</p>
   <div class="cyclewrap rv">
@@ -758,11 +783,8 @@ footer{max-width:1180px;margin:0 auto;padding:40px 24px 80px;color:var(--dim);fo
       <li data-i="6"><b>07</b><span>The Orchestrator releases the next agent, which reads what was just written.</span></li>
     </ol>
   </div>
-</section>
-
-<!-- ROUTE -->
-<section id="sroute" data-nav="Where it runs">
-  <div class="tag">00 · Where the model runs</div>
+</div>
+<div class="vw-pane" hidden id="sroute" data-label="Where the model runs">
   <h2 class="rv">The model runs where the project <em>allows it.</em></h2>
   <p class="lede rv">The planner picks cloud or local once, for the whole run. For restricted work the choice is made for you, and the code enforces it instead of a policy document.</p>
   <div class="rt rv">
@@ -777,7 +799,21 @@ footer{max-width:1180px;margin:0 auto;padding:40px 24px 80px;color:var(--dim);fo
       <div class="mdl" id="mdlLocal" data-m="local"><div class="mi">▣</div><h3>Local model</h3><ul><li>Everything stays on the machine</li><li>Smaller, so jobs are kept narrow</li><li>Required for restricted work</li><li>Checked before the run: reachable, installed, loaded</li><li>Restricted runs: the operating system blocks everything except this machine</li></ul><div class="mstat" id="stLocal"></div></div>
     </div>
   </div>
+</div>
+<div class="vw-pane" hidden id="srework" data-label="When the audit fails">
+  <h2 class="rv">A finding goes back to <em>the agent that owns it.</em></h2>
+  <p class="lede rv">Compliance never talks to development. A launcher, either a person or the run script, reads the findings and sends each one to the agent that wrote the item. Everything downstream of that agent reruns.</p>
+  <div class="card rv" style="margin-top:40px;padding:26px">
+    <div class="rwbar" id="rwBar"><span class="mono" id="rwState">AUDIT READY</span><span id="rwFinding" class="mono"></span></div>
+    <div class="rwrow" id="rwRow"></div>
+    <div class="rwlog mono" id="rwLog">Press the button to inject a problem into the record.</div>
+    <div class="cycbtns"><button class="btn pri" id="rwGo">Compliance finds a problem</button><button class="btn" id="rwReset">Reset</button></div>
+  </div>
+</div>
 </section>
+
+<!-- ROUTE -->
+
 
 <!-- FIREWALL -->
 <section id="s4" data-nav="Firewall">
@@ -845,11 +881,7 @@ footer{max-width:1180px;margin:0 auto;padding:40px 24px 80px;color:var(--dim);fo
       <div class="finds" id="mxFinds"><span style="color:var(--dim)">No findings. Every requirement traces to code and to a test that exists.</span></div>
     </div>
   </div>
-</section>
-
-<!-- ONE CHAIN -->
-<section id="schain" data-nav="One requirement">
-  <div class="tag">One requirement</div>
+<div class="vw-sub" id="schain">
   <h2 class="rv">One requirement, <em>all the way down.</em></h2>
   <p class="lede rv">This is real output from a finished sample run, not a mock-up. A pilot asks for a mute button, and seven agents turn that one sentence into requirements, code and a test that proves the 500 millisecond limit. Every arrow is a link stored in the record, so the audit can walk it in both directions.</p>
   <ol class="ch rv">
@@ -891,7 +923,11 @@ static void test_tc9_mute_deasserts_tone_within_500ms(void)
 }</code></pre></div></li>
   </ol>
   <p class="pf-note rv">Text is copied word for word from the run's record on an invented landing gear brief. The two code panels are trimmed for length, nothing is reworded. If any link in this chain were missing, the checker would refuse the audit.</p>
+</div>
 </section>
+
+<!-- ONE CHAIN -->
+
 
 <!-- MUTATION -->
 <section id="s6" data-nav="Do tests catch bugs">
@@ -922,20 +958,10 @@ static void test_tc9_mute_deasserts_tone_within_500ms(void)
 </section>
 
 <!-- REWORK -->
-<section id="srework" data-nav="Rework loop">
-  <div class="tag">00 · When the audit fails</div>
-  <h2 class="rv">A finding goes back to <em>the agent that owns it.</em></h2>
-  <p class="lede rv">Compliance never talks to development. A launcher, either a person or the run script, reads the findings and sends each one to the agent that wrote the item. Everything downstream of that agent reruns.</p>
-  <div class="card rv" style="margin-top:40px;padding:26px">
-    <div class="rwbar" id="rwBar"><span class="mono" id="rwState">AUDIT READY</span><span id="rwFinding" class="mono"></span></div>
-    <div class="rwrow" id="rwRow"></div>
-    <div class="rwlog mono" id="rwLog">Press the button to inject a problem into the record.</div>
-    <div class="cycbtns"><button class="btn pri" id="rwGo">Compliance finds a problem</button><button class="btn" id="rwReset">Reset</button></div>
-  </div>
-</section>
+
 
 <!-- PUBLISH -->
-<section id="s7" data-nav="Safe publish">
+<section id="s7" data-nav="Publishing">
   <div class="tag">08 · Getting it into the platform</div>
   <h2 class="rv">Publishing happens <em>once,</em> so every guard sits in front of it.</h2>
   <p class="lede rv">The certification platform has no update and no delete. Whatever is written stays written. So nothing goes in during the run. It goes in at the end, after the audit, and only if a person says yes.</p>
@@ -964,11 +990,7 @@ static void test_tc9_mute_deasserts_tone_within_500ms(void)
     <div class="card rail"><div class="ic">◉</div><div class="n">GUARD 05</div><h3>Read it back</h3><p>After writing, the same records are read from the platform and compared with what was sent.</p></div>
   </div>
   <div class="pubbar rv"><button class="btn pri" id="pubRun">Walk the guards</button><span class="pubstat" id="pubStat">Plan only. Nothing is written in this walkthrough.</span></div>
-</section>
-
-<!-- OUT -->
-<section id="sout" data-nav="What comes out">
-  <div class="tag">00 · What comes out</div>
+<div class="vw-sub" id="sout">
   <h2 class="rv">A brief goes in. <em>An audit-ready package</em> comes out.</h2>
   <p class="lede rv">Every item is traced to the one above it, every draft was approved by a person, and the record says who and which model made it.</p>
   <div class="outgrid rv">
@@ -990,10 +1012,14 @@ static void test_tc9_mute_deasserts_tone_within_500ms(void)
   provenance.json  <span class="d">who approved what, which model, when</span>
   documents/       <span class="d">design description, test report (made after a clean audit)</span>
   publish_plan     <span class="d">every platform call, for a human yes</span></div>
+</div>
 </section>
 
+<!-- OUT -->
+
+
 <!-- ROLE -->
-<section id="s8" data-nav="My part">
+<section id="s8" data-nav="My part and lessons">
   <div class="tag">09 · My part in it</div>
   <h2 class="rv">I came to this from <em>testing the platform</em> first.</h2>
   <p class="lede rv">Working on a certification platform for DO-178C and DO-254 projects meant finding where it fails before designing anything that writes into it. That is why the safety guards look the way they do.</p>
@@ -1003,11 +1029,7 @@ static void test_tc9_mute_deasserts_tone_within_500ms(void)
     <div class="card"><div class="big">2</div><h3>Standards worked through</h3><p>DO-178C and DO-330 training covering assurance levels, requirements traceability, and tool qualification.</p></div>
     <div class="card"><div class="big">1</div><h3>Agent framework designed and built</h3><p>The two-team workflow on this page, worked out with the engineering lead and built in Python with a regression suite that runs without calling a model.</p></div>
   </div>
-</section>
-
-<!-- LEARNED -->
-<section id="s9" data-nav="What I learned">
-  <div class="tag">10 · What building it taught me</div>
+<div class="vw-sub" id="s9">
   <h2 class="rv">Six things I would tell <em>the next team.</em></h2>
   <div class="learn rv">
     <div class="card"><div class="q">01</div><div><h3>A model should not grade its own work</h3><p>The compliance team uses plain rules instead of a model. The same kind of mistake does not get checked by the same kind of mind.</p></div></div>
@@ -1025,24 +1047,14 @@ static void test_tc9_mute_deasserts_tone_within_500ms(void)
       <li>Records written to the platform cannot be edited later, so rework has to finish before publishing.</li>
     </ul>
   </div>
+</div>
 </section>
 
+<!-- LEARNED -->
+
+
 <!-- GLOSSARY -->
-<section id="sgloss" data-nav="Glossary">
-  <div class="tag">00 · Plain-language glossary</div>
-  <h2 class="rv">The words on this page, <em>in plain English.</em></h2>
-  <div class="gl rv">
-    <div class="card"><h3>DO-178C</h3><p>The standard that governs software in airborne systems. It asks for proof at every step: what the software must do, how it is built, and how it was tested.</p></div>
-    <div class="card"><h3>High-level requirement</h3><p>A statement of what the system must do, written so it can be tested. One per behavior in the customer brief.</p></div>
-    <div class="card"><h3>Low-level requirement</h3><p>A finer-grained statement of how a piece of the software will meet a high-level one. The code is written against these.</p></div>
-    <div class="card"><h3>Traceability</h3><p>An unbroken chain from a requirement, to its design, to its code, to the test that proves it. A gap anywhere is a finding.</p></div>
-    <div class="card"><h3>MCP</h3><p>Model Context Protocol, a standard way for an AI agent to use another system's tools. Here it is how agents read from and write to the platform.</p></div>
-    <div class="card"><h3>Orchestrator</h3><p>The plain-code controller that releases each agent when the one before it finishes. It uses no AI, so it behaves the same way every time.</p></div>
-    <div class="card"><h3>Firewall</h3><p>The rule that development and compliance never message each other. Only the shared record connects them, so QA stays independent.</p></div>
-    <div class="card"><h3>Mutation check</h3><p>Deliberately breaking a copy of the code to see whether the tests notice. A test that passes both ways is not proving anything.</p></div>
-    <div class="card"><h3>Provenance</h3><p>The record of who approved each item, which model drafted it, and when. It makes any auto-approval visible to the auditor.</p></div>
-  </div>
-</section>
+
 
 <!-- ROAD -->
 <section id="sroad" data-nav="Where it stands">
@@ -1073,6 +1085,21 @@ static void test_tc9_mute_deasserts_tone_within_500ms(void)
       <li>A trial on a real, non-sensitive project with an engineer reviewing every gate.</li>
     </ul></div>
   </div>
+
+  <details class="vw-gloss" id="sgloss"><summary>The words on this page, in plain English <span>glossary</span></summary>
+  
+  <div class="gl rv">
+    <div class="card"><h3>DO-178C</h3><p>The standard that governs software in airborne systems. It asks for proof at every step: what the software must do, how it is built, and how it was tested.</p></div>
+    <div class="card"><h3>High-level requirement</h3><p>A statement of what the system must do, written so it can be tested. One per behavior in the customer brief.</p></div>
+    <div class="card"><h3>Low-level requirement</h3><p>A finer-grained statement of how a piece of the software will meet a high-level one. The code is written against these.</p></div>
+    <div class="card"><h3>Traceability</h3><p>An unbroken chain from a requirement, to its design, to its code, to the test that proves it. A gap anywhere is a finding.</p></div>
+    <div class="card"><h3>MCP</h3><p>Model Context Protocol, a standard way for an AI agent to use another system's tools. Here it is how agents read from and write to the platform.</p></div>
+    <div class="card"><h3>Orchestrator</h3><p>The plain-code controller that releases each agent when the one before it finishes. It uses no AI, so it behaves the same way every time.</p></div>
+    <div class="card"><h3>Firewall</h3><p>The rule that development and compliance never message each other. Only the shared record connects them, so QA stays independent.</p></div>
+    <div class="card"><h3>Mutation check</h3><p>Deliberately breaking a copy of the code to see whether the tests notice. A test that passes both ways is not proving anything.</p></div>
+    <div class="card"><h3>Provenance</h3><p>The record of who approved each item, which model drafted it, and when. It makes any auto-approval visible to the auditor.</p></div>
+  </div>
+</details>
 </section>
 
 </main>
@@ -1094,8 +1121,20 @@ secs.forEach((s,i)=>{const a=document.createElement('a');a.href='#'+s.id;a.inner
 const navA=[...nav.children];
 const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in')}),{threshold:.12});
 $$('.rv').forEach(e=>io.observe(e));
-const io2=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){navA.forEach(a=>a.classList.remove('on'));navA[secs.indexOf(e.target)].classList.add('on')}}),{threshold:.45});
+const io2=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){navA.forEach(a=>a.classList.remove('on'));navA[secs.indexOf(e.target)].classList.add('on')}}),{rootMargin:'-45% 0px -50% 0px',threshold:0});
 secs.forEach(s=>io2.observe(s));
+
+/* merged sections: tab views and links that land inside a hidden view */
+function vwShow(id){const p=document.getElementById(id);if(!p||!p.classList.contains('vw-pane'))return false;const sec=p.closest('section');
+  sec.querySelectorAll('.vw-pane').forEach(x=>{x.hidden=x!==p});
+  sec.querySelectorAll('.vw-tab').forEach(t=>{const on=t.dataset.pane===id;t.classList.toggle('on',on);t.setAttribute('aria-selected',on)});
+  p.querySelectorAll('.rv').forEach(e=>e.classList.add('in'));window.dispatchEvent(new Event('resize'));return true}
+$$('.vw-tab').forEach(t=>{t.addEventListener('click',()=>vwShow(t.dataset.pane));t.addEventListener('keydown',e=>{if(e.key!=='ArrowRight'&&e.key!=='ArrowLeft')return;const ts=[...t.parentNode.children];const n=ts[(ts.indexOf(t)+(e.key==='ArrowRight'?1:ts.length-1))%ts.length];n.focus();vwShow(n.dataset.pane)})});
+function vwHash(h){const id=(h||'').replace('#','');if(!id)return;const el=document.getElementById(id);if(!el)return;
+  if(el.classList.contains('vw-pane')){vwShow(id);setTimeout(()=>el.closest('section').scrollIntoView(),30)}
+  else if(el.tagName==='DETAILS'){el.open=true}}
+document.addEventListener('click',e=>{const a=e.target.closest('a[href^="#"]');if(!a)return;const id=a.getAttribute('href').slice(1);const el=document.getElementById(id);if(el&&(el.classList.contains('vw-pane')||el.tagName==='DETAILS')){e.preventDefault();vwHash('#'+id);history.replaceState(null,'','#'+id)}});
+if(location.hash)vwHash(location.hash);
 
 /* counters */
 $$('.stat b').forEach(b=>{const t=+b.dataset.n;let n=0;const id=setInterval(()=>{n+=Math.max(1,Math.ceil(t/30));if(n>=t){n=t;clearInterval(id)}b.textContent=n},40)});
