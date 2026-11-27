@@ -4,6 +4,16 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex,nofollow">
+<meta name="description" content="Safety-critical documents and code written by AI agents, with a person at every gate and an independent team checking the work. Interactive design walkthrough with a real end to end run.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Agentic Engineering Workflow: an engineering team made of agents">
+<meta property="og:description" content="Safety-critical documents and code written by AI agents, with a person at every gate and an independent team checking the work. Interactive design walkthrough with a real end to end run.">
+<meta property="og:url" content="https://yashrao10.github.io/agentic-engineering-workflow/">
+<meta property="og:image" content="https://yashrao10.github.io/agentic-engineering-workflow/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://yashrao10.github.io/agentic-engineering-workflow/og.png">
 <title>Agentic Engineering Workflow</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -374,14 +384,14 @@ footer{max-width:1180px;margin:0 auto;padding:40px 24px 80px;color:var(--dim);fo
 .gl h3{font-size:18px;margin-bottom:8px;color:var(--cy)}.gl p{color:var(--mut);font-size:15px}
 
 /* ---------- 3D scenes ---------- */
-.iso3{display:grid;grid-template-columns:1.7fr 1fr;gap:22px;margin-top:40px;align-items:start}
-@media(max-width:960px){.iso3{grid-template-columns:1fr}}
+.iso3{display:grid;grid-template-columns:1fr;gap:18px;margin-top:40px;align-items:start}
 .isoview{position:relative;border:1px solid var(--line);border-radius:20px;background:radial-gradient(600px 340px at 50% 55%,rgba(90,209,255,.07),transparent 70%),var(--bg2);cursor:grab;overflow:hidden}
 .isoview:active{cursor:grabbing}
 .isoview svg{display:block;width:100%;height:auto;touch-action:pan-y;user-select:none}
 .isobtns{position:absolute;left:14px;bottom:12px;display:flex;gap:10px;align-items:center}
 .isobtns .hint{font-size:11px;color:var(--dim);letter-spacing:.08em}
-.isoinfo{min-height:300px}
+@media(max-width:700px){.isobtns{position:static;flex-wrap:wrap;padding:4px 12px 14px}.isobtns .btn{padding:8px 12px;font-size:13px}}
+.isoinfo{min-height:0}
 .isorw{display:flex;gap:12px;font-size:14px;color:var(--mut);padding:7px 0;border-top:1px solid var(--line)}
 .isorw span{font:600 11px var(--mono);color:var(--dim);letter-spacing:.12em;text-transform:uppercase;min-width:58px;padding-top:2px}
 .isostat{margin-top:12px;padding:14px 16px;border:1px solid var(--line2);border-radius:14px;background:rgba(90,209,255,.05)}
@@ -393,6 +403,24 @@ footer{max-width:1180px;margin:0 auto;padding:40px 24px 80px;color:var(--dim);fo
 .statstrip .card span{display:block;font-size:13px;color:var(--mut);margin-top:6px}
 .isofoot{color:var(--dim);font-size:13px;margin-top:14px;max-width:820px}
 .isocap{font-size:14px;color:var(--mut);margin-top:10px;min-height:22px}
+.pf-grid{display:grid;grid-template-columns:1.15fr 1fr;gap:18px;margin-top:34px;align-items:start}
+@media(max-width:900px){.pf-grid{grid-template-columns:1fr}}
+.pf-rcpt{font-family:var(--mono);font-size:13px;line-height:1.75;padding:0;overflow:hidden}
+.pf-rcpt .pf-bar{display:flex;align-items:center;gap:8px;padding:12px 18px;border-bottom:1px solid var(--line);color:var(--dim);font-size:12px}
+.pf-rcpt .pf-bar i{width:10px;height:10px;border-radius:50%;background:var(--line2);display:inline-block}
+.pf-rcpt .pf-body{padding:18px 20px}
+.pf-row{display:grid;grid-template-columns:118px 1fr;gap:10px;border-bottom:1px dashed var(--line);padding:6px 0}
+.pf-row:last-child{border-bottom:0}
+.pf-row b{color:var(--mut);font-weight:500}
+.pf-ok{color:var(--gr)}.pf-wait{color:var(--am)}.pf-big{color:var(--gr);font-size:17px;font-weight:700;letter-spacing:.04em}
+.pf-tiles{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+.pf-tiles .card{padding:18px}
+.pf-tiles b{display:block;font-size:28px;line-height:1.1;color:var(--cy);font-weight:700}
+.pf-tiles span{display:block;font-size:13px;color:var(--mut);margin-top:6px}
+.pf-note{color:var(--dim);font-size:13px;margin-top:16px;max-width:820px}
+.pf-plat{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
+.pf-plat span{font-family:var(--mono);font-size:12px;border:1px solid var(--line2);border-radius:999px;padding:6px 12px;color:var(--ink)}
+.pf-plat span::before{content:"\2713  ";color:var(--gr)}
 </style>
 </head>
 <body>
@@ -417,9 +445,39 @@ footer{max-width:1180px;margin:0 auto;padding:40px 24px 80px;color:var(--dim);fo
   </div>
   <div class="jump rv">
     <span class="mono">JUMP TO</span>
-    <a href="#s2">Watch it run</a><a href="#s2b">Explore the stack</a><a href="#s4">Try the firewall</a><a href="#s5">Break the audit</a><a href="#sout">What comes out</a><a href="#sroad">Where it stands</a>
+    <a href="#sproof">See a real run</a><a href="#s2">Watch it run</a><a href="#s2b">Explore the stack</a><a href="#s4">Try the firewall</a><a href="#s5">Break the audit</a><a href="#sout">What comes out</a><a href="#sroad">Where it stands</a>
   </div>
   <div class="scrollhint">SCROLL</div>
+</section>
+
+<!-- PROOF -->
+<section id="sproof" data-nav="Real run">
+  <div class="tag">Real run</div>
+  <h2 class="rv">It already runs <em>end to end.</em> Here is the receipt.</h2>
+  <p class="lede rv">This is the results card the workflow printed at the end of one real run on a Windows machine, from a sample brief. A brief went in, ten agents did their jobs, and the run stopped at the publish gate to wait for a person. None of these numbers are illustrative.</p>
+  <div class="pf-grid rv">
+    <div class="card pf-rcpt" role="group" aria-label="Results card from a real run">
+      <div class="pf-bar"><i></i><i></i><i></i><span>final_summary.txt</span></div>
+      <div class="pf-body">
+        <div class="pf-row"><b>Verdict</b><span class="pf-big">AUDIT READY</span></div>
+        <div class="pf-row"><b>Development</b><span><span class="pf-ok">7 of 7 agents done</span><br>intake, planner, requirements, design, code and unit tests, test procedures, test code</span></div>
+        <div class="pf-row"><b>Compliance</b><span><span class="pf-ok">3 of 3 agents clean</span><br>checker, verification, QA</span></div>
+        <div class="pf-row"><b>Publish</b><span class="pf-wait">waiting for a person to say yes</span></div>
+        <div class="pf-row"><b>Output</b><span>6 source files, 4 test files, full trace record</span></div>
+        <div class="pf-row"><b>Blocking</b><span>0 problems</span></div>
+      </div>
+    </div>
+    <div class="pf-tiles">
+      <div class="card"><b>8 of 8</b><span>requirements traced all the way to code and tests</span></div>
+      <div class="card"><b>24 of 24</b><span>planted defects caught by the generated tests</span></div>
+      <div class="card"><b>9m 47s</b><span>of agent time, brief to audit-ready package</span></div>
+      <div class="card"><b>35 of 40</b><span>cloud calls used, under a hard cap</span></div>
+      <div class="card"><b>1</b><span>automatic rework round, sent back to the owning agent</span></div>
+      <div class="card"><b>224</b><span>automated checks pass, none call a model</span></div>
+    </div>
+  </div>
+  <div class="pf-plat rv"><span>macOS</span><span>Windows (WSL, Ubuntu)</span><span>publish gate held shut</span></div>
+  <p class="pf-note rv">Honest footnote: QA raised 7 warnings, all the same note. The run was started in auto-approve mode, so no person signed off each step along the way. That is what the human gate is for in a real project.</p>
 </section>
 
 <!-- IDEA -->
@@ -603,7 +661,7 @@ footer{max-width:1180px;margin:0 auto;padding:40px 24px 80px;color:var(--dim);fo
   <h2 class="rv">Twelve agents, <em>three teams.</em> Spin it, click one.</h2>
   <p class="lede rv">Drag to turn the scene. Click any block to see what that agent does and how it has done in my own test runs. A plain-code Orchestrator sits above all of them and never writes a requirement. The flat, step-by-step version of the same run is in the section above, so you have both.</p>
   <div class="iso3 rv">
-    <div class="isoview"><svg id="iso1" viewBox="0 0 900 660" role="img" aria-label="3D view of the development, compliance and publishing teams. Click an agent for details."></svg>
+    <div class="isoview"><svg id="iso1" viewBox="20 100 860 560" role="img" aria-label="3D view of the development, compliance and publishing teams. Click an agent for details."></svg>
       <div class="isobtns"><button class="btn pri" id="iso1Play">&#9654; Play a run</button><button class="btn" id="iso1Reset">Reset</button><button class="btn" id="iso1Mode">Mode: stage, publish at end</button><span class="mono hint">drag to rotate</span></div></div>
     <div class="card isoinfo" id="iso1Info"></div>
   </div>
@@ -943,7 +1001,7 @@ footer{max-width:1180px;margin:0 auto;padding:40px 24px 80px;color:var(--dim);fo
     <div class="card"><h3 class="rh w">Proven so far</h3><ul>
       <li>Full runs on invented sample briefs, with a cloud model.</li>
       <li>Generated code builds and its tests pass.</li>
-      <li>The audit catches deliberately broken records.</li>
+      <li>The audit catches deliberately broken records.</li><li>A full end to end run on a second operating system (Windows, through WSL): audit ready, 8 of 8 requirements traced, 24 of 24 planted defects caught, publish gate held for a person.</li>
     </ul><p style="color:var(--dim);font-size:13px;margin-top:10px">Passing the audit means complete and traceable, not that the requirements are right. That judgment stays with the person at the gate.</p></div>
     <div class="card"><h3 class="rh n">Next</h3><ul>
       <li>A full run on a local model for restricted work, using the new safeguards (built and tested with stand-in models, not yet proven on a real local run).</li>
@@ -1397,16 +1455,13 @@ S.draw=g=>{
   /* the platform, two layers down, and the MCP layer above it */
   S.poly(g,[[5.3,-3.1,ZP],[8.7,-3.1,ZP],[8.7,1.7,ZP],[5.3,1.7,ZP]],'#2b2210',C.am,.92,'',1.2);
   S.cyl(g,PX,PY,.7,.8,'#4a3510',C.am,ZP,auditOK||platN>0?C.am:null);
-  S.text(g,PX,PY,ZP+1.75,'PLATFORM '+platN+' records',C.am,10,'middle',600);
   S.poly(g,[[-7.8,-3.3,ZM],[8.9,-3.3,ZM],[8.9,7.2,ZM],[-7.8,7.2,ZM]],C.am,C.am,.07,'6 4',1.3);
-  S.text(g,8.7,6.95,ZM+.15,'MCP · MODEL CONTEXT PROTOCOL',C.am,10,'end',700);
-  S.text(g,8.7,6.3,ZM+.15,'create + read tools only: no update, no delete',C.mut,9,'end',500);
   /* platforms */
   S.slab(g,-7.3,-.4,-2.7,3.1,'#16264a',C.l2);
   S.slab(g,1.6,4.3,-2.7,3.1,'#1d1840','#6d58b8');
   S.slab(g,1.6,4.3,3.4,6.8,'#2b2210','#8a6a2f');
   S.text(g,-7.1,2.95,.3,'DEVELOPMENT TEAM',C.mut,10,'start',600);
-  S.text(g,1.8,-3.2,.3,'COMPLIANCE TEAM',C.vi,10,'start',600);
+  S.text(g,1.7,-4.3,.3,'COMPLIANCE TEAM',C.vi,10,'start',600);
   S.text(g,1.8,6.6,.3,'PUBLISHING · CLEAN AUDIT ONLY',C.am,9,'start',600);
   /* handoff arrows on the platform */
   EDGE.forEach(e=>S.line(g,[N[e[0]].x,N[e[0]].y,.32],[N[e[1]].x,N[e[1]].y,.32],st[e[0]]==='done'?C.gr:'#33497a',st[e[0]]==='done'?2.4:1.6));
@@ -1425,6 +1480,10 @@ S.draw=g=>{
     const hit=S.box;void hit});
   Object.keys(N).forEach(k=>{const n=N[k];S.text(g,n.x,n.y,1.12,n.l,k===sel?'#fff':'#c7d6f5',11,'middle',k===sel?700:500)});
   if(pk){S.dot(g,pk,pk[2]<0?C.am:C.cy,5);if(pk.tool)S.text(g,pk[0],pk[1],pk[2]+.7,pk.tool,C.am,9,'middle',600)}
+  /* lower-layer labels drawn last, so the team platforms never cover them */
+  S.text(g,PX,2.5,ZP+.2,'PLATFORM · '+platN+' records',C.am,10,'middle',600);
+  S.text(g,-1.2,6.6,ZM+.15,'MCP · MODEL CONTEXT PROTOCOL',C.am,10,'middle',700);
+  S.text(g,-1.2,7.3,ZM+.15,'create + read tools only: no update, no delete',C.mut,9,'middle',500);
   /* invisible hit targets: one circle per agent, so clicking works from any angle */
   Object.keys(N).forEach(k=>{const p=S.P(N[k].x,N[k].y,.5);const c=mk('circle',{cx:p[0],cy:p[1],r:S.scale*.8,fill:'transparent',style:'cursor:pointer'},g);c.addEventListener('click',()=>pick(k))});
 };
