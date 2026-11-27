@@ -421,6 +421,21 @@ footer{max-width:1180px;margin:0 auto;padding:40px 24px 80px;color:var(--dim);fo
 .pf-plat{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
 .pf-plat span{font-family:var(--mono);font-size:12px;border:1px solid var(--line2);border-radius:999px;padding:6px 12px;color:var(--ink)}
 .pf-plat span::before{content:"\2713  ";color:var(--gr)}
+.ch{list-style:none;margin-top:36px;position:relative;max-width:900px}
+.ch::before{content:"";position:absolute;left:19px;top:20px;bottom:20px;width:2px;background:linear-gradient(var(--mut),var(--cy),var(--vi),var(--gr),var(--am))}
+.ch-t{display:grid;grid-template-columns:40px 1fr;gap:16px;margin-bottom:14px;position:relative}
+.ch-n{width:40px;height:40px;border-radius:50%;background:var(--bg);border:2px solid var(--c);color:var(--c);display:flex;align-items:center;justify-content:center;font:700 14px var(--mono);position:relative;z-index:1}
+.ch-card{padding:16px 18px;border-left:3px solid var(--c);min-width:0}
+.ch-h{display:flex;flex-wrap:wrap;justify-content:space-between;gap:6px 14px;align-items:baseline}
+.ch-l{font-weight:700;font-size:17px;color:var(--ink)}
+.ch-a{font:12px var(--mono);color:var(--dim);letter-spacing:.04em}
+.ch-ids{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.ch-ids code{font:11px var(--mono);color:var(--c);border:1px solid var(--line2);border-radius:6px;padding:2px 7px}
+.ch-q{color:var(--mut);font-size:15px;margin-top:10px;line-height:1.55}
+.ch-two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:700px){.ch-two{grid-template-columns:1fr}.ch-t{grid-template-columns:30px 1fr;gap:10px}.ch-n{width:30px;height:30px;font-size:12px}.ch::before{left:14px}}
+.ch-code{margin-top:10px;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px 14px;overflow-x:auto;font:12.5px/1.55 var(--mono);color:#c7d6f5;max-width:100%}
+.ch-code code{font:inherit;white-space:pre}
 </style>
 </head>
 <body>
@@ -445,7 +460,7 @@ footer{max-width:1180px;margin:0 auto;padding:40px 24px 80px;color:var(--dim);fo
   </div>
   <div class="jump rv">
     <span class="mono">JUMP TO</span>
-    <a href="#sproof">See a real run</a><a href="#s2">Watch it run</a><a href="#s2b">Explore the stack</a><a href="#s4">Try the firewall</a><a href="#s5">Break the audit</a><a href="#sout">What comes out</a><a href="#sroad">Where it stands</a>
+    <a href="#sproof">See a real run</a><a href="#s2">Watch it run</a><a href="#s2b">Explore the stack</a><a href="#s4">Try the firewall</a><a href="#s5">Break the audit</a><a href="#schain">Follow one requirement</a><a href="#sout">What comes out</a><a href="#sroad">Where it stands</a>
   </div>
   <div class="scrollhint">SCROLL</div>
 </section>
@@ -828,6 +843,52 @@ footer{max-width:1180px;margin:0 auto;padding:40px 24px 80px;color:var(--dim);fo
       <div class="finds" id="mxFinds"><span style="color:var(--dim)">No findings. Every requirement traces to code and to a test that exists.</span></div>
     </div>
   </div>
+</section>
+
+<!-- ONE CHAIN -->
+<section id="schain" data-nav="One requirement">
+  <div class="tag">One requirement</div>
+  <h2 class="rv">One requirement, <em>all the way down.</em></h2>
+  <p class="lede rv">This is real output from a finished sample run, not a mock-up. A pilot asks for a mute button, and seven agents turn that one sentence into requirements, code and a test that proves the 500 millisecond limit. Every arrow is a link stored in the record, so the audit can walk it in both directions.</p>
+  <ol class="ch rv">
+    <li class="ch-t" style="--c:var(--mut)"><div class="ch-n">1</div><div class="ch-card card"><div class="ch-h"><span class="ch-l">Customer request</span><span class="ch-a">written by the intake agent</span></div><div class="ch-ids"><code>cr-5</code></div><p class="ch-q">The system shall silence the gear warning tone when the pilot operates the gear warning mute button.</p></div></li>
+    <li class="ch-t" style="--c:var(--cy)"><div class="ch-n">2</div><div class="ch-card card"><div class="ch-h"><span class="ch-l">System requirement</span><span class="ch-a">written by the planner agent</span></div><div class="ch-ids"><code>sr-5</code><code>traces to cr-5</code></div><p class="ch-q">The software shall stop the gear warning tone output within 500 milliseconds of receiving an active gear warning mute discrete from the pilot control panel.</p></div></li>
+    <li class="ch-t" style="--c:var(--cy)"><div class="ch-n">3</div><div class="ch-card card"><div class="ch-h"><span class="ch-l">High-level requirement</span><span class="ch-a">written by the requirements agent</span></div><div class="ch-ids"><code>hlr-5</code><code>traces to sr-5</code><code>safety</code><code>verified by test</code></div><p class="ch-q">The software shall de-assert the gear warning tone output within 500 milliseconds of the gear warning mute discrete from the pilot control panel becoming active.</p></div></li>
+    <li class="ch-t" style="--c:var(--vi)"><div class="ch-n">4</div><div class="ch-card card"><div class="ch-h"><span class="ch-l">Low-level requirements</span><span class="ch-a">written by the design agent</span></div><div class="ch-ids"><code>llr-10</code><code>llr-11</code><code>both trace to hlr-5</code></div><div class="ch-two"><p class="ch-q">The gear acquisition module shall set the MUTE_ACTIVE flag in the 50 millisecond cycle in which the gear warning mute discrete from the pilot control panel reads active.</p><p class="ch-q">The warning tone module shall de-assert the gear warning tone output within 100 milliseconds of the MUTE_ACTIVE flag asserting.</p></div></div></li>
+    <li class="ch-t" style="--c:var(--gr)"><div class="ch-n">5</div><div class="ch-card card"><div class="ch-h"><span class="ch-l">Source code</span><span class="ch-a">written by the coding agent</span></div><div class="ch-ids"><code>warning_tone.c</code><code>tagged llr-11</code></div><pre class="ch-code"><code>/* LLR: llr-11 */
+static bool warning_tone_mute_gate(bool tone, bool mute_active)
+{
+    /* MUTE_ACTIVE overrides the hold and de-asserts the tone immediately. */
+    if (mute_active) {
+        return false;
+    }
+
+    return tone;
+}</code></pre></div></li>
+    <li class="ch-t" style="--c:var(--am)"><div class="ch-n">6</div><div class="ch-card card"><div class="ch-h"><span class="ch-l">Test case and procedure</span><span class="ch-a">written by the test procedure agent</span></div><div class="ch-ids"><code>tc-9</code><code>tp-9</code><code>trace to hlr-5</code></div><p class="ch-q">Verify that with the gear warning tone output asserted and the gear warning mute discrete from the pilot control panel becoming active, the gear warning tone output is expected to de-assert within 500 milliseconds.</p></div></li>
+    <li class="ch-t" style="--c:var(--am)"><div class="ch-n">7</div><div class="ch-card card"><div class="ch-h"><span class="ch-l">Test code</span><span class="ch-a">written by the test code agent</span></div><div class="ch-ids"><code>test_gear_warning_tone_mute_deassert.c</code><code>tagged tc-9</code><code>built and passed</code></div><pre class="ch-code"><code>/* TC: tc-9 */
+static void test_tc9_mute_deasserts_tone_within_500ms(void)
+{
+    ...
+    /* Pilot control panel mute discrete becomes active. */
+    g_mute_din = true;
+
+    while (elapsed_ms &lt; TC9_DEASSERT_LIMIT_MS) {
+        gear_acquisition_task();
+        elapsed_ms += TC9_TICK_MS;
+        ...
+        if (!warning_tone_is_asserted(&amp;w)) {
+            deasserted = true;
+            deassert_ms = elapsed_ms;
+            break;
+        }
+    }
+
+    CHECK(deasserted == true);
+    CHECK(deassert_ms &lt;= TC9_DEASSERT_LIMIT_MS);
+}</code></pre></div></li>
+  </ol>
+  <p class="pf-note rv">Text is copied word for word from the run's record on an invented landing gear brief. The two code panels are trimmed for length, nothing is reworded. If any link in this chain were missing, the checker would refuse the audit.</p>
 </section>
 
 <!-- MUTATION -->
