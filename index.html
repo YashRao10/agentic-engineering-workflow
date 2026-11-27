@@ -21,7 +21,7 @@
 <style>
 :root{
   --bg:#060a13; --bg2:#0a1020; --panel:#0d1527; --panel2:#111b33; --line:#1d2b4a; --line2:#2b3f6b;
-  --ink:#e8eefb; --mut:#8a9bc0; --dim:#5b6c91;
+  --ink:#e8eefb; --mut:#8a9bc0; --dim:#7485ac;
   --cy:#5ad1ff; --cyd:#1b7fa8; --am:#ffb454; --gr:#4ade80; --rd:#ff5d6c; --vi:#a78bfa;
   --sans:'Space Grotesk',system-ui,-apple-system,'Segoe UI',sans-serif;
   --mono:'JetBrains Mono',ui-monospace,'SF Mono',Menlo,monospace;
@@ -45,6 +45,7 @@ h2 em{font-style:normal;color:var(--cy)}
 .lede{color:var(--mut);max-width:680px;margin-top:20px;font-size:18px}
 .rv{opacity:0;transform:translateY(26px);transition:opacity .8s ease,transform .8s ease}
 .rv.in{opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){.rv{opacity:1;transform:none;transition:none}}
 .card{background:linear-gradient(180deg,var(--panel2),var(--panel));border:1px solid var(--line);border-radius:16px;padding:22px}
 .mono{font-family:var(--mono)}
 button{font-family:var(--sans);cursor:pointer}
@@ -439,6 +440,7 @@ footer{max-width:1180px;margin:0 auto;padding:40px 24px 80px;color:var(--dim);fo
 </style>
 </head>
 <body>
+<noscript><style>.rv{opacity:1;transform:none}</style></noscript>
 <a class="skip" href="#s2">Skip to the live diagram</a>
 <div id="topbar"></div>
 
