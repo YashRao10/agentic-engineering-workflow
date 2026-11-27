@@ -422,6 +422,9 @@ footer{max-width:1180px;margin:0 auto;padding:40px 24px 80px;color:var(--dim);fo
 .pf-plat{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
 .pf-plat span{font-family:var(--mono);font-size:12px;border:1px solid var(--line2);border-radius:999px;padding:6px 12px;color:var(--ink)}
 .pf-plat span::before{content:"\2713  ";color:var(--gr)}
+.ft-links{display:flex;flex-wrap:wrap;justify-content:center;gap:10px 22px;margin-bottom:18px}
+.ft-links a{color:var(--cy);text-decoration:none;font-weight:600}
+.ft-links a:hover{text-decoration:underline}
 .vw-tabs{display:flex;flex-wrap:wrap;gap:8px;margin-top:30px;padding:6px;border:1px solid var(--line);border-radius:14px;background:var(--bg2);width:fit-content;max-width:100%}
 .vw-tab{background:transparent;border:0;color:var(--mut);font:600 14px var(--sans);padding:10px 16px;border-radius:10px;transition:.2s}
 .vw-tab:hover{color:var(--ink)}
@@ -1105,8 +1108,9 @@ static void test_tc9_mute_deasserts_tone_within_500ms(void)
 </main>
 
 <footer>
-  Illustrative walkthrough. The example requirements are invented and no customer data appears anywhere on this page.<br>
-  Tool and platform names are generalized. Counts in the mutation demo are illustrative.
+  <div class="ft-links"><a href="#s0">Back to top</a><a href="https://yashrao10.github.io/">More projects by Yash Rao</a><a href="https://github.com/YashRao10/agentic-engineering-workflow">Source on GitHub</a></div>
+  The Real run and One requirement sections are real output from sample runs on invented briefs. The interactive demos use illustrative counts.<br>
+  No customer data appears anywhere on this page. Tool and platform names are generalized.
 </footer>
 
 <script>
